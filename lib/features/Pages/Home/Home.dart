@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 
 import 'Components/Features.dart';
 import 'Components/Footer.dart';
+import 'Components/Hero.dart';
 import 'Components/benifits.dart';
 
 
@@ -54,7 +55,7 @@ class _HomeState extends State<Home> {
                       signInOpen = open;
                     });
                   }),
-                  Hero(setSignInOpen: (bool open) {
+                  HeroSection(setSignInOpen: (bool open) {
                     setState(() {
                       signInOpen = open;
                     });
