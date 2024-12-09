@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'features/dashboard/presentation/pages/dashboard_page.dart';
-import 'features/splash/presentation/pages/splash_page.dart';
+
 
 void main() {
   runApp(const ProjectManagementApp());
