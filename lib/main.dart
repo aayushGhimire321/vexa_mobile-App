@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'features/Pages/Home/Home.dart';
+
 
 void main() {
   runApp(const ProjectManagementApp());
@@ -11,16 +13,14 @@ class ProjectManagementApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Project Management App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Colors.blue, // Set primary color here
+        textTheme: TextTheme(
+          bodyLarge: TextStyle(color: Colors.black), // Set text color here
+        ),
       ),
-      initialRoute: '/splash',
-      routes: {
-        '/splash': (context) => const SplashPage(),
-        '/dashboard': (context) => const DashboardPage(), // Add Dashboard Page
-      },
+      home: Home(),
     );
+
   }
 }
