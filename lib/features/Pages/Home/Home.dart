@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'Components/Features.dart';
 import 'Components/Footer.dart';
 import 'Components/Hero.dart';
+import 'Components/Navbar.dart';
 import 'Components/benifits.dart';
 
 
