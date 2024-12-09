@@ -33,9 +33,11 @@ class Faq extends StatelessWidget {
                   fontSize: 36,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  textAlign: TextAlign.center,
                 ),
+                textAlign: TextAlign.center, // Correct placement of the textAlign property
               ),
+
+      ),
             ),
             // FAQ List
             Expanded(
