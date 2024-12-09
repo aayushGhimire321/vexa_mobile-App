@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 class HeroBgAnimation extends StatelessWidget {
+  const HeroBgAnimation({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 500,
       height: 500,
       child: CustomPaint(
