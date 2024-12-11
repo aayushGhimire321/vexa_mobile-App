@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'login_screen.dart';
+import 'package:vexa/screens/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -36,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   }
 
   _navigateToLogin() async {
-    await Future.delayed(Duration(seconds: 5), () {});
+    await Future.delayed(Duration(seconds: 3), () {});
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => LoginScreen()),
@@ -57,9 +56,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 'assets/logo/Logo.png',
                 height: 350,
               ),
-              const SizedBox(height: 20),
-              const Text(
-                'Vexa',
+              SizedBox(height: 20),
+              Text(
+                'Logging App',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
