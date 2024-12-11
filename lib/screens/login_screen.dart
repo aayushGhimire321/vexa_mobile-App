@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:login_register_app/screens/register_screen.dart';
-import 'package:login_register_app/widgets/custom_button.dart';
-import 'package:login_register_app/widgets/custom_textfield.dart';
+
+import '../widgets/custom_button.dart';
+import '../widgets/custom_textfield.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
