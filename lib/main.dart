@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Login Register App',
+      title: 'Vexa',
       theme: AppTheme.darkTheme,
       home: SplashScreen(),
     );
