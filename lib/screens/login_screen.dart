@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vexa/screens/register_screen.dart';
+import 'package:vexa/screens/dashboard_screen.dart'; // Import the DashboardScreen
 
 import '../widgets/custom_button.dart';
 import '../widgets/custom_textfield.dart';
@@ -50,7 +51,13 @@ class LoginScreen extends StatelessWidget {
               SizedBox(height: 20),
               CustomButton(
                 text: 'Login',
-                onPressed: () {},
+                onPressed: () {
+                  // Navigate to the DashboardScreen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DashboardScreen()),
+                  );
+                },
               ),
               SizedBox(height: 10),
               Text(
