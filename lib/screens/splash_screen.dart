@@ -59,7 +59,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
               ),
               SizedBox(height: 20),
               Text(
-                'Logging App',
+                'Vexa',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
