@@ -32,7 +32,7 @@ class RegisterScreen extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam tincidunt ante lacus.',
+                'Register with the proper credentials',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,
