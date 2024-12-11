@@ -18,7 +18,7 @@ class RegisterScreen extends StatelessWidget {
             children: <Widget>[
               SizedBox(height: 40),
               Image.asset(
-                'assets/register.png',
+                'assets/images/register.png',
                 height: 160,
               ),
               SizedBox(height: 10),
@@ -32,7 +32,7 @@ class RegisterScreen extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam tincidunt ante lacus.',
+                'Register with the proper credentials',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,
