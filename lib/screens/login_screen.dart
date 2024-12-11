@@ -17,7 +17,7 @@ class LoginScreen extends StatelessWidget {
             children: <Widget>[
               SizedBox(height: 40),
               Image.asset(
-                'assets/login.png',
+                'assets/images/login.png',
                 height: 160,
               ),
               SizedBox(height: 10),
@@ -31,7 +31,7 @@ class LoginScreen extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam tincidunt ante lacus, eu pretium purus vulputate sit amet.',
+                'Login with the registered credentials to use this app',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,
