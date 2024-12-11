@@ -57,8 +57,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 'assets/logo/Logo.png',
                 height: 350,
               ),
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Vexa',
                 style: TextStyle(
                   fontSize: 24,
