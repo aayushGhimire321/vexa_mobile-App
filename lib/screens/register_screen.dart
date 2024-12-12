@@ -44,9 +44,8 @@ class RegisterScreen extends StatelessWidget {
               SizedBox(height: 20),
               CustomTextField(
 
-                hintText: 'Username', controller: null,
-
                 hintText: 'Username',
+
                 controller: usernameController, // Assign controller
 
               ),
@@ -54,15 +53,14 @@ class RegisterScreen extends StatelessWidget {
               CustomTextField(
                 hintText: 'Password',
 
-                obscureText: true, controller: null,
-
                 obscureText: true,
+
+
                 controller: passwordController, // Assign controller
               ),
               SizedBox(height: 10),
               CustomTextField(
                 hintText: 'Confirm Password',
-                obscureText: true, controller: null,
                 obscureText: true,
                 controller: confirmPasswordController, // Assign controller
               ),
