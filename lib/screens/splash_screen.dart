@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vexa/screens/login_screen.dart';
+import 'package:vexa/screens/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     _controller!.forward();
 
-    _navigateToLogin();
+    _navigateToOnboarding();
   }
 
   @override
@@ -34,11 +34,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     super.dispose();
   }
 
-  _navigateToLogin() async {
+  _navigateToOnboarding() async {
     await Future.delayed(Duration(seconds: 3), () {});
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
+      MaterialPageRoute(builder: (context) => OnboardingScreen()),
     );
   }
 
