@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 class AppTheme {
   static ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
-    primaryColor: Color(0xFF5364e8),
+    primaryColor: Color(0xff6e7ee8),
     hintColor: Colors.blueAccent,
     textTheme: GoogleFonts.poppinsTextTheme(
       ThemeData.dark().textTheme,
