@@ -60,12 +60,6 @@ class LoginScreen extends StatelessWidget {
               CustomButton(
                 text: 'Login',
                 onPressed: () {
-                  // Navigate to the DashboardScreen
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DashboardScreen()),
-                  );
-
                   String username = usernameController.text.trim();
                   String password = passwordController.text.trim();
 
@@ -98,7 +92,6 @@ class LoginScreen extends StatelessWidget {
                       ),
                     );
                   }
-
                 },
               ),
               SizedBox(height: 10),
