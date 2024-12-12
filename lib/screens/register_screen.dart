@@ -1,11 +1,13 @@
-
 import 'package:flutter/material.dart';
 
 import '../widgets/custom_button.dart';
 import '../widgets/custom_textfield.dart';
 
-
 class RegisterScreen extends StatelessWidget {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,22 +43,63 @@ class RegisterScreen extends StatelessWidget {
               ),
               SizedBox(height: 20),
               CustomTextField(
+
                 hintText: 'Username', controller: null,
+
+                hintText: 'Username',
+                controller: usernameController, // Assign controller
+
               ),
               SizedBox(height: 10),
               CustomTextField(
                 hintText: 'Password',
+
                 obscureText: true, controller: null,
+
+                obscureText: true,
+                controller: passwordController, // Assign controller
               ),
               SizedBox(height: 10),
               CustomTextField(
                 hintText: 'Confirm Password',
                 obscureText: true, controller: null,
+                obscureText: true,
+                controller: confirmPasswordController, // Assign controller
               ),
               SizedBox(height: 20),
               CustomButton(
                 text: 'Register',
-                onPressed: () {},
+                onPressed: () {
+                  String username = usernameController.text.trim();
+                  String password = passwordController.text.trim();
+                  String confirmPassword = confirmPasswordController.text.trim();
+
+                  if (password != confirmPassword) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Passwords do not match',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    return;
+                  }
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Registered successfully!',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+
+                  // Navigate to the login screen
+                  Navigator.pop(context);
+                },
               ),
               SizedBox(height: 10),
               Text(
