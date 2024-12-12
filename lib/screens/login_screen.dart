@@ -81,7 +81,7 @@ class LoginScreen extends StatelessWidget {
                       ),
                     );
 
-                    // Navigate to the DashboardScreen
+                    // Navigate to the DashboardScreen after login is successful
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => DashboardScreen()),
