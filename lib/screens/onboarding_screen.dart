@@ -33,6 +33,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor, // Use primaryColor from theme
       body: Column(
         children: [
           Expanded(
@@ -66,9 +67,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, '/login');
                   },
-                  child: const Text("Skip"),
+                  child: Text(
+                    "Skip",
+                    style: TextStyle(color: Theme.of(context).hintColor), // Use hintColor
+                  ),
                 ),
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).hintColor, // Use hintColor for button
+                  ),
                   onPressed: () {
                     if (_currentIndex == _onboardingData.length - 1) {
                       Navigator.pushReplacementNamed(context, '/login');
@@ -79,9 +86,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       );
                     }
                   },
-                  child: Text(_currentIndex == _onboardingData.length - 1
-                      ? "Get Started"
-                      : "Next"),
+                  child: Text(
+                    _currentIndex == _onboardingData.length - 1
+                        ? "Get Started"
+                        : "Next",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ],
             ),
