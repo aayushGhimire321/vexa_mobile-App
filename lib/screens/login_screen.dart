@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:vexa/screens/register_screen.dart';
 import 'package:vexa/screens/dashboard_screen.dart'; // Import the DashboardScreen
 
-
 import '../widgets/custom_button.dart';
 import '../widgets/custom_textfield.dart';
 
