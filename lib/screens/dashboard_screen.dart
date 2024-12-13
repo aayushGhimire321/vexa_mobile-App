@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import '../themes/theme.dart';
+
 
 class DashboardScreen extends StatelessWidget {
+  const DashboardScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dashboard'),
+        title: const Text('Dashboard'),
       ),
       body: const Center(
         child: Text(
@@ -15,4 +19,14 @@ class DashboardScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+void main() {
+  runApp(
+    MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.darkTheme, // Use the imported theme
+      home: DashboardScreen(),
+    ),
+  );
 }

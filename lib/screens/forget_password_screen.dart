@@ -9,6 +9,8 @@ class ForgotPasswordScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Forgot Password'),
       ),
+      // Use the theme's background color for the scaffold's background
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(

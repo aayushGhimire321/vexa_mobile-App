@@ -3,12 +3,26 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatelessWidget {
   final String hintText;
   final bool obscureText;
+  final TextEditingController controller; // Controller to manage text input
+  final String initialText; // Added initialText to set initial value
 
-  CustomTextField({required this.hintText, this.obscureText = false, required TextEditingController controller});
+  // Constructor now takes an optional initialText
+  CustomTextField({
+    required this.hintText,
+    this.obscureText = false,
+    required this.controller,
+    this.initialText = '', // Default to empty string if not provided
+  });
 
   @override
   Widget build(BuildContext context) {
+    // Set the initial text if provided
+    if (initialText.isNotEmpty) {
+      controller.text = initialText;
+    }
+
     return TextField(
+      controller: controller, // Use the controller to manage the text
       obscureText: obscureText,
       decoration: InputDecoration(
         hintText: hintText,

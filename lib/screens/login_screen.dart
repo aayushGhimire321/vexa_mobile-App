@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:vexa/screens/register_screen.dart';
-import 'package:vexa/screens/dashboard_screen.dart'; // Import the DashboardScreen
-
+import 'package:vexa/screens/dashboard_screen.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_textfield.dart';
 import 'forget_password_screen.dart';
 
 class LoginScreen extends StatelessWidget {
-  final String correctUsername = "Aayush";
-  final String correctPassword = "12345";
+  final String correctUsername = "Aayush"; // Correct username
+  final String correctPassword = "12345"; // Correct password
 
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -16,20 +15,20 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor, // Set the background color here
+      backgroundColor: Theme.of(context).primaryColor,
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               Image.asset(
                 'assets/images/login.png',
                 height: 160,
               ),
-              SizedBox(height: 10),
-              Text(
+              const SizedBox(height: 10),
+              const Text(
                 'Login into app',
                 style: TextStyle(
                   fontSize: 24,
@@ -37,8 +36,8 @@ class LoginScreen extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              SizedBox(height: 10),
-              Text(
+              const SizedBox(height: 10),
+              const Text(
                 'Login with the registered credentials to use this app',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -46,16 +45,16 @@ class LoginScreen extends StatelessWidget {
                   color: Colors.white70,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               CustomTextField(
                 hintText: 'Username',
-                controller: usernameController, // Bind to the username controller
+                controller: usernameController,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               CustomTextField(
                 hintText: 'Password',
                 obscureText: true,
-                controller: passwordController, // Bind to the password controller
+                controller: passwordController,
               ),
               Align(
                 alignment: Alignment.centerRight,
@@ -63,7 +62,8 @@ class LoginScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ForgotPasswordScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => ForgotPasswordScreen()),
                     );
                   },
                   child: Text(
@@ -75,17 +75,21 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               CustomButton(
                 text: 'Login',
                 onPressed: () {
                   String username = usernameController.text.trim();
                   String password = passwordController.text.trim();
 
+                  // Debugging output to the console
+                  print("Entered Username: $username");
+                  print("Entered Password: $password");
+
                   if (username == correctUsername && password == correctPassword) {
-                    // If credentials are correct
+                    // Correct credentials - Navigate to Dashboard
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
+                      const SnackBar(
                         content: Text(
                           'Logged in successfully',
                           style: TextStyle(color: Colors.white),
@@ -93,16 +97,14 @@ class LoginScreen extends StatelessWidget {
                         backgroundColor: Colors.green,
                       ),
                     );
-
-                    // Navigate to the DashboardScreen after login is successful
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => DashboardScreen()),
                     );
                   } else {
-                    // If credentials are incorrect
+                    // Incorrect credentials - Show error
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
+                      const SnackBar(
                         content: Text(
                           'Invalid credentials',
                           style: TextStyle(color: Colors.white),
@@ -113,8 +115,8 @@ class LoginScreen extends StatelessWidget {
                   }
                 },
               ),
-              SizedBox(height: 10),
-              Text(
+              const SizedBox(height: 10),
+              const Text(
                 'or',
                 style: TextStyle(color: Colors.white70),
               ),
