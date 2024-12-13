@@ -4,6 +4,7 @@ import 'package:vexa/screens/dashboard_screen.dart'; // Import the DashboardScre
 
 import '../widgets/custom_button.dart';
 import '../widgets/custom_textfield.dart';
+import 'forget_password_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   final String correctUsername = "Aayush";
@@ -55,6 +56,24 @@ class LoginScreen extends StatelessWidget {
                 hintText: 'Password',
                 obscureText: true,
                 controller: passwordController, // Bind to the password controller
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ForgotPasswordScreen()),
+                    );
+                  },
+                  child: Text(
+                    'Forgot Password?',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
               ),
               SizedBox(height: 20),
               CustomButton(
