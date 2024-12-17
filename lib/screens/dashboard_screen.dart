@@ -1,29 +1,46 @@
 import 'package:flutter/material.dart';
-import '../widgets/sidebar.dart';
-import '../widgets/action_button.dart';
 import '../widgets/stat_card.dart';
+import '../widgets/action_button.dart';
+import '../widgets/sidebar.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
+  @override
+  _DashboardScreenState createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  String selectedPage = "Dashboard"; // Default page selection
+
+  void _handleSidebarSelection(String page) {
+    setState(() {
+      selectedPage = page;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF121212),
-      drawer: Sidebar(), // Sidebar widget
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF121212),
-        elevation: 0,
-        title: const Text(
-          'Dashboard',
-          style: TextStyle(color: Colors.white),
+        title: Text(
+          selectedPage,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
-      body: const Padding(
-        padding: EdgeInsets.all(16.0),
+      drawer: Sidebar(
+        onItemSelected: _handleSidebarSelection,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // First Row: Stat Cards
+            // Stat Cards Row
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -40,13 +57,13 @@ class DashboardScreen extends StatelessWidget {
               ],
             ),
             SizedBox(height: 20),
-            // Second Row: Action Buttons
+            // Action Buttons Row
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ActionButton(
                   title: "Create New Project",
-                  color: Colors.purple,
+                  color: Theme.of(context).primaryColor,
                 ),
                 ActionButton(
                   title: "Create New Team",
@@ -58,9 +75,8 @@ class DashboardScreen extends StatelessWidget {
             // Recent Projects Section
             Text(
               "Recent Projects",
-              style: TextStyle(
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: Colors.white,
-                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -68,7 +84,9 @@ class DashboardScreen extends StatelessWidget {
               child: Center(
                 child: Text(
                   "No projects available",
-                  style: TextStyle(color: Colors.grey),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Colors.grey,
+                  ),
                 ),
               ),
             ),

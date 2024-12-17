@@ -1,68 +1,119 @@
 import 'package:flutter/material.dart';
 
 class Sidebar extends StatelessWidget {
+  final Function(String) onItemSelected;
+
+  const Sidebar({
+    Key? key,
+    required this.onItemSelected,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Color(0xFF1E1E1E),
-      child: ListView(
-        padding: EdgeInsets.zero,
+      backgroundColor: Colors.black87, // Sidebar background color
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Sidebar Header
           DrawerHeader(
             decoration: BoxDecoration(
-              color: Color(0xFF121212),
+              color: Theme.of(context).primaryColor,
             ),
             child: Row(
               children: [
-                Icon(Icons.menu, color: Colors.white),
+                Icon(Icons.dashboard, color: Colors.white, size: 28),
                 SizedBox(width: 10),
                 Text(
                   'VEXA',
-                  style: TextStyle(
-                    color: Colors.purpleAccent,
-                    fontSize: 24,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
           ),
-          _buildSidebarItem(Icons.dashboard, "Dashboard"),
-          _buildSidebarItem(Icons.work_outline, "Projects"),
-          _buildSidebarItem(Icons.assignment, "Your Works"),
-          _buildSidebarItem(Icons.people, "Community"),
-          Divider(color: Colors.grey),
-          _buildSidebarSection("Teams"),
-          _buildSidebarItem(Icons.flag, "Nepali"),
-          _buildSidebarItem(Icons.add, "New Team"),
-          Divider(color: Colors.grey),
-          _buildSidebarItem(Icons.light_mode, "Light Mode"),
-          _buildSidebarItem(Icons.logout, "Logout"),
+          // Sidebar Menu Items
+          _buildSidebarItem(
+            context,
+            icon: Icons.dashboard,
+            title: "Dashboard",
+            onTap: () => onItemSelected("Dashboard"),
+          ),
+          _buildSidebarItem(
+            context,
+            icon: Icons.folder_open,
+            title: "Projects",
+            onTap: () => onItemSelected("Projects"),
+          ),
+          _buildSidebarItem(
+            context,
+            icon: Icons.work_outline,
+            title: "Your Works",
+            onTap: () => onItemSelected("Your Works"),
+          ),
+          _buildSidebarItem(
+            context,
+            icon: Icons.group,
+            title: "Community",
+            onTap: () => onItemSelected("Community"),
+          ),
+          Divider(color: Colors.white24, thickness: 1),
+          // Teams Section
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              "Teams",
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                color: Colors.white54,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          _buildSidebarItem(
+            context,
+            icon: Icons.group,
+            title: "Nepali",
+            onTap: () => onItemSelected("Nepali Team"),
+          ),
+          _buildSidebarItem(
+            context,
+            icon: Icons.add,
+            title: "New Team",
+            onTap: () => onItemSelected("New Team"),
+          ),
+          Spacer(),
+          // Bottom Options
+          _buildSidebarItem(
+            context,
+            icon: Icons.wb_sunny,
+            title: "Light Mode",
+            onTap: () => onItemSelected("Light Mode"),
+          ),
+          _buildSidebarItem(
+            context,
+            icon: Icons.logout,
+            title: "Logout",
+            onTap: () => onItemSelected("Logout"),
+          ),
+          SizedBox(height: 20),
         ],
       ),
     );
   }
 
-  Widget _buildSidebarSection(String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Text(
-        title,
-        style: TextStyle(color: Colors.grey, fontSize: 14),
-      ),
-    );
-  }
-
-  Widget _buildSidebarItem(IconData icon, String title) {
+  Widget _buildSidebarItem(BuildContext context,
+      {required IconData icon, required String title, required VoidCallback onTap}) {
     return ListTile(
-      leading: Icon(icon, color: Colors.white),
+      leading: Icon(icon, color: Colors.white70),
       title: Text(
         title,
-        style: TextStyle(color: Colors.white, fontSize: 16),
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+          color: Colors.white70,
+        ),
       ),
-      onTap: () {
-        // Handle navigation
-      },
+      onTap: onTap,
     );
   }
 }

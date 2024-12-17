@@ -19,7 +19,7 @@ class StatCard extends StatelessWidget {
         margin: const EdgeInsets.all(8.0),
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: Colors.white12, // Light card background in dark theme
+          color: Theme.of(context).primaryColor.withOpacity(0.2), // Blue-tinted background
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
@@ -28,7 +28,7 @@ class StatCard extends StatelessWidget {
             Text(
               title,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Colors.white70,
+                color: Colors.white70, // Lighter text for readability
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -36,7 +36,7 @@ class StatCard extends StatelessWidget {
             Text(
               value,
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: Theme.of(context).primaryColor,
+                color: Theme.of(context).primaryColor, // Use theme's primary color
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -44,7 +44,7 @@ class StatCard extends StatelessWidget {
             Text(
               subtitle,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Colors.grey,
+                color: Colors.white54, // Muted white for secondary info
               ),
             ),
           ],
