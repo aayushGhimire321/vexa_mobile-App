@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import '../widgets/sidebar.dart';
-import '../widgets/stat_card.dart';
 import '../widgets/action_button.dart';
+import '../widgets/stat_card.dart';
 
 class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF121212),
+      backgroundColor: const Color(0xFF121212),
       drawer: Sidebar(), // Sidebar widget
       appBar: AppBar(
-        backgroundColor: Color(0xFF121212),
+        backgroundColor: const Color(0xFF121212),
         elevation: 0,
-        title: Text(
+        title: const Text(
           'Dashboard',
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: const Padding(
+        padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
