@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import '../widgets/sidebar.dart';
 import '../widgets/stat_card.dart';
 import '../widgets/action_button.dart';
-=======
-import '../widgets/stat_card.dart';
-import '../widgets/action_button.dart';
-import '../widgets/sidebar.dart';
+
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -21,24 +17,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       selectedPage = page;
     });
   }
->>>>>>> dashboard
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-<<<<<<< HEAD
-      backgroundColor: Color(0xFF121212),
-      drawer: Sidebar(), // Sidebar widget
-      appBar: AppBar(
-        backgroundColor: Color(0xFF121212),
-        elevation: 0,
-        title: Text(
-          'Dashboard',
-          style: TextStyle(color: Colors.white),
-        ),
-        centerTitle: true,
-      ),
-=======
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
@@ -54,17 +36,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
       drawer: Sidebar(
         onItemSelected: _handleSidebarSelection,
       ),
->>>>>>> dashboard
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-<<<<<<< HEAD
             // First Row: Stat Cards
-=======
             // Stat Cards Row
->>>>>>> dashboard
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -81,21 +59,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ],
             ),
             SizedBox(height: 20),
-<<<<<<< HEAD
-            // Second Row: Action Buttons
-=======
-            // Action Buttons Row
->>>>>>> dashboard
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ActionButton(
                   title: "Create New Project",
-<<<<<<< HEAD
-                  color: Colors.purple,
-=======
                   color: Theme.of(context).primaryColor,
->>>>>>> dashboard
+
                 ),
                 ActionButton(
                   title: "Create New Team",
@@ -107,14 +78,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             // Recent Projects Section
             Text(
               "Recent Projects",
-<<<<<<< HEAD
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-=======
+
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: Colors.white,
->>>>>>> dashboard
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -122,13 +88,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: Center(
                 child: Text(
                   "No projects available",
-<<<<<<< HEAD
-                  style: TextStyle(color: Colors.grey),
-=======
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: Colors.grey,
                   ),
->>>>>>> dashboard
                 ),
               ),
             ),

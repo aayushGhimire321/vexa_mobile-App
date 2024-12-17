@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vexa/screens/dashboard_screen.dart';
 import 'package:vexa/themes/theme.dart';
 import 'screens/splash_screen.dart';
 import 'screens/onboarding_screen.dart';
@@ -15,13 +16,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Vexa App',
       theme: AppTheme.darkTheme,
+      debugShowCheckedModeBanner: false, // Removes the DEBUG banner.
       initialRoute: '/splash', // Set splash as the initial route
       routes: {
         '/splash': (context) => SplashScreen(),
         '/onboarding': (context) => OnboardingScreen(),
         '/login': (context) => LoginScreen(),
         '/register': (context) => RegisterScreen(), // Add registration route
-        '/dashboard': (context) => RegisterScreen(), // Add registration route
+        '/dashboard': (context) => DashboardScreen(), // Add registration route
 
       },
     );
