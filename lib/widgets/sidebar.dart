@@ -83,6 +83,24 @@ class Sidebar extends StatelessWidget {
             title: "New Team",
             onTap: () => onItemSelected("New Team"),
           ),
+          Divider(color: Colors.white24, thickness: 1),
+          // Settings Section
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              "Settings",
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                color: Colors.white54,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          _buildSidebarItem(
+            context,
+            icon: Icons.settings,
+            title: "Settings",
+            onTap: () => onItemSelected("Settings"),
+          ),
           Spacer(),
           // Bottom Options
           _buildSidebarItem(
