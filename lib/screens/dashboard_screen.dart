@@ -34,6 +34,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       drawer: Sidebar(
         onItemSelected: _handleSidebarSelection,
+        selectedItem: selectedPage, // Pass the currently selected page here
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
