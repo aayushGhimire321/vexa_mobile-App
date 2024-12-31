@@ -6,7 +6,6 @@ import 'package:vexa/screens/settings_page.dart';
 import 'package:vexa/screens/your_works_page.dart';
 
 import '../screens/dashboard_screen.dart';
-import '../screens/nepaliteampage.dart';
 
 class Sidebar extends StatelessWidget {
   final Function(String) onItemSelected;
@@ -99,16 +98,6 @@ class Sidebar extends StatelessWidget {
                       color: Colors.white54,
                       fontWeight: FontWeight.bold,
                     ),
-                  ),
-                ),
-                _buildSidebarItem(
-                  context,
-                  icon: Icons.group,
-                  title: "Nepali",
-                  isSelected: selectedItem == "Nepali Team",
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => NepaliTeamPage()),
                   ),
                 ),
                 _buildSidebarItem(
