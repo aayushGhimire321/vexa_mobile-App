@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import '../widgets/sidebar.dart';
 import '../widgets/stat_card.dart';
 import '../widgets/action_button.dart';
-import '../widgets/sidebar.dart';
+
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -41,6 +42,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // First Row: Stat Cards
             // Stat Cards Row
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -58,13 +60,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ],
             ),
             SizedBox(height: 20),
-            // Action Buttons Row
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ActionButton(
                   title: "Create New Project",
                   color: Theme.of(context).primaryColor,
+
                 ),
                 ActionButton(
                   title: "Create New Team",
@@ -76,6 +79,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             // Recent Projects Section
             Text(
               "Recent Projects",
+
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,

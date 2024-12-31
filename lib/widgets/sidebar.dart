@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:vexa/screens/communtiy_page.dart';
+import 'package:vexa/screens/new_team_page.dart';
+import 'package:vexa/screens/projects_page.dart';
+import 'package:vexa/screens/settings_page.dart';
+import 'package:vexa/screens/your_works_page.dart';
+
+import '../screens/dashboard_screen.dart';
 
 class Sidebar extends StatelessWidget {
   final Function(String) onItemSelected;
@@ -37,106 +44,131 @@ class Sidebar extends StatelessWidget {
             ),
           ),
           // Sidebar Menu Items
-          _buildSidebarItem(
-            context,
-            icon: Icons.dashboard,
-            title: "Dashboard",
-            isSelected: selectedItem == "DashboardPage",
-            onTap: () => _navigateToPage(context, "DashboardPage"),
-          ),
-          _buildSidebarItem(
-            context,
-            icon: Icons.folder_open,
-            title: "Projects",
-            isSelected: selectedItem == "ProjectsPage",
-            onTap: () => _navigateToPage(context, "ProjectsPage"),
-          ),
-          _buildSidebarItem(
-            context,
-            icon: Icons.work_outline,
-            title: "Your Works",
-            isSelected: selectedItem == "YourWorksPage",
-            onTap: () => _navigateToPage(context, "YourWorksPage"),
-          ),
-          _buildSidebarItem(
-            context,
-            icon: Icons.group,
-            title: "Community",
-            isSelected: selectedItem == "CommunityPage",
-            onTap: () => _navigateToPage(context, "CommunityPage"),
-          ),
-          Divider(color: Colors.white24, thickness: 1),
-          // Teams Section
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              "Teams",
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: Colors.white54,
-                fontWeight: FontWeight.bold,
-              ),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                _buildSidebarItem(
+                  context,
+                  icon: Icons.dashboard,
+                  title: "Dashboard",
+                  isSelected: selectedItem == "Dashboard",
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DashboardScreen()),
+                  ),
+                ),
+                _buildSidebarItem(
+                  context,
+                  icon: Icons.folder_open,
+                  title: "Projects",
+                  isSelected: selectedItem == "Projects",
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ProjectsPage()),
+                  ),
+                ),
+                _buildSidebarItem(
+                  context,
+                  icon: Icons.work_outline,
+                  title: "Your Works",
+                  isSelected: selectedItem == "Your Works",
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => YourWorksPage()),
+                  ),
+                ),
+                _buildSidebarItem(
+                  context,
+                  icon: Icons.group,
+                  title: "Community",
+                  isSelected: selectedItem == "Community",
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CommunityPage()),
+                  ),
+                ),
+                Divider(color: Colors.white24, thickness: 1),
+                // Teams Section
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    "Teams",
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: Colors.white54,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                _buildSidebarItem(
+                  context,
+                  icon: Icons.add,
+                  title: "New Team",
+                  isSelected: selectedItem == "New Team",
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => NewTeamPage()),
+                  ),
+                ),
+                Divider(color: Colors.white24, thickness: 1),
+                // Settings Section
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    "Settings",
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: Colors.white54,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                _buildSidebarItem(
+                  context,
+                  icon: Icons.settings,
+                  title: "Settings",
+                  isSelected: selectedItem == "Settings",
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SettingsPage()),
+                  ),
+                ),
+              ],
             ),
           ),
-          _buildSidebarItem(
-            context,
-            icon: Icons.group,
-            title: "Nepali",
-            isSelected: selectedItem == "NepaliTeamPage",
-            onTap: () => _navigateToPage(context, "NepaliTeamPage"),
-          ),
-          _buildSidebarItem(
-            context,
-            icon: Icons.add,
-            title: "New Team",
-            isSelected: selectedItem == "NewTeamPage",
-            onTap: () => _navigateToPage(context, "NewTeamPage"),
-          ),
-          Divider(color: Colors.white24, thickness: 1),
-          // Settings Section
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              "Settings",
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: Colors.white54,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          _buildSidebarItem(
-            context,
-            icon: Icons.settings,
-            title: "Settings",
-            isSelected: selectedItem == "SettingsPage",
-            onTap: () => _navigateToPage(context, "SettingsPage"),
-          ),
-          Spacer(), // Push the bottom options to the bottom
           // Bottom Options
-          _buildSidebarItem(
-            context,
-            icon: Icons.wb_sunny,
-            title: "Light Mode",
-            isSelected: selectedItem == "LightModePage",
-            onTap: () => _toggleTheme(context),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: Column(
+              children: [
+                _buildSidebarItem(
+                  context,
+                  icon: Icons.wb_sunny,
+                  title: "Light Mode",
+                  isSelected: selectedItem == "Light Mode",
+                  onTap: () => onItemSelected("Light Mode"),
+                ),
+                _buildSidebarItem(
+                  context,
+                  icon: Icons.logout,
+                  title: "Logout",
+                  isSelected: selectedItem == "Logout",
+                  onTap: () => onItemSelected("Logout"),
+                ),
+              ],
+            ),
           ),
-          _buildSidebarItem(
-            context,
-            icon: Icons.logout,
-            title: "Logout",
-            isSelected: selectedItem == "LogoutPage",
-            onTap: () => _navigateToPage(context, "LogoutPage"),
-          ),
-          const SizedBox(height: 20),
         ],
       ),
     );
   }
 
-  Widget _buildSidebarItem(BuildContext context,
-      {required IconData icon,
+  Widget _buildSidebarItem(
+      BuildContext context, {
+        required IconData icon,
         required String title,
         required bool isSelected,
-        required VoidCallback onTap}) {
+        required VoidCallback onTap,
+      }) {
     return ListTile(
       leading: Tooltip(
         message: title,
@@ -150,26 +182,6 @@ class Sidebar extends StatelessWidget {
         ),
       ),
       onTap: onTap,
-    );
-  }
-
-  void _navigateToPage(BuildContext context, String pageName) {
-    Navigator.pop(context); // Close the drawer
-    try {
-      Navigator.pushNamed(context, pageName); // Navigate to the respective page
-      onItemSelected(pageName); // Optional: Trigger callback for additional handling
-    } catch (e) {
-      // Show a SnackBar for unregistered routes
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Page $pageName not found')),
-      );
-    }
-  }
-
-  void _toggleTheme(BuildContext context) {
-    // Add logic to toggle between light and dark themes
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Theme toggled')),
     );
   }
 }
