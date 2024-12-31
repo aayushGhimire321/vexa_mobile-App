@@ -1,7 +1,9 @@
+
 import 'package:flutter/material.dart';
 
 import '../widgets/onboarding_indicator.dart';
 import '../widgets/onboarding_page.dart';
+
 
 class OnboardingScreen extends StatefulWidget {
   @override
