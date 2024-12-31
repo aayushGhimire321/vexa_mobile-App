@@ -184,8 +184,7 @@ class Sidebar extends StatelessWidget {
       onTap: onTap,
     );
   }
-<<<<<<< HEAD
+
 }
-=======
-}
->>>>>>> dashboard
+
+

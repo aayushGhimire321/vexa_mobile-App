@@ -35,8 +35,5 @@ class OnboardingPage extends StatelessWidget {
       ],
     );
   }
-<<<<<<< HEAD
+
 }
-=======
-}
->>>>>>> dashboard

@@ -15,20 +15,17 @@ class OnboardingIndicator extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
         total,
-            (index) => Container(
-          margin: const EdgeInsets.symmetric(horizontal: 4),
-          width: currentIndex == index ? 12 : 8,
-          height: 8,
-          decoration: BoxDecoration(
-            color: currentIndex == index ? Colors.blue : Colors.grey,
-            borderRadius: BorderRadius.circular(4),
-          ),
-        ),
+            (index) =>
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              width: currentIndex == index ? 12 : 8,
+              height: 8,
+              decoration: BoxDecoration(
+                color: currentIndex == index ? Colors.blue : Colors.grey,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
       ),
     );
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> dashboard
