@@ -27,4 +27,12 @@ class AppStrings {
   static const String loginImage = 'assets/images/login.png';
   static const String registerImage = 'assets/images/register.png';
 
+  static const String resetPasswordTitle = 'Reset Your Password';
+  static const String resetPasswordDescription = 'Enter your registered email address. We will send you a link to reset your password.';
+  static const String emailLabel = 'Email';
+  static const String sendResetLinkButton = 'Send Reset Link';
+  static const String successMessage = 'Password reset link sent to';
+  static const String errorMessage = 'Please enter a valid email address';
+  static const String genericErrorMessage = 'Something went wrong. Please try again later.';
+
 }
