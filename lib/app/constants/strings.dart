@@ -24,4 +24,7 @@ class AppStrings {
       "description": "Stay organized and accomplish tasks effectively.",
     },
   ];
+  static const String loginImage = 'assets/images/login.png';
+  static const String registerImage = 'assets/images/register.png';
+
 }
