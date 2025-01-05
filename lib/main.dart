@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vexa/features/splash/presentation/view/splash_screen.dart';
 import 'core/theme/theme.dart';
+import 'features/auth/presentation/view/login_screen.dart';
 import 'features/onboarding/presentation/view/onboarding_screen.dart';
 
 void main() {
@@ -19,6 +20,7 @@ class VexaApp extends StatelessWidget {
       routes: {
         '/splash': (context) =>  SplashScreen(),
         '/onboarding': (context) =>  OnboardingScreen(), // Route for onboarding
+        '/login': (context) => LoginScreen(),
       },
       // Optionally, you can check whether onboarding has been completed
       // and set the home to SplashScreen or OnboardingFlow

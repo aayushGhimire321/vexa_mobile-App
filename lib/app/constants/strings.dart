@@ -34,5 +34,5 @@ class AppStrings {
   static const String successMessage = 'Password reset link sent to';
   static const String errorMessage = 'Please enter a valid email address';
   static const String genericErrorMessage = 'Something went wrong. Please try again later.';
-
 }
+
