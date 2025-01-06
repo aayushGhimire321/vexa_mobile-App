@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../app/constants/strings.dart';
 import '../../../../app/widget/action_button.dart';
+import '../../../../app/widget/sidebar.dart';
+import '../../../../app/widget/stat_card.dart';
 import '../view_model/dashboard/dashboard_bloc.dart';
 import '../view_model/dashboard/dashboard_event.dart';
 import '../view_model/dashboard/dashboard_state.dart'; // Import strings

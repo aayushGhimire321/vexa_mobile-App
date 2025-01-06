@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../features/dashboard/presentation/view/dashboard_screen.dart';
 import '../../features/dashboard/presentation/view/projects_page.dart';
 import '../../features/dashboard/presentation/view/your_works_page.dart';
+import '../../features/settings/presentation/settings_page.dart';
 
 class Sidebar extends StatelessWidget {
   final Function(String) onItemSelected;
@@ -62,7 +63,7 @@ class Sidebar extends StatelessWidget {
                   isSelected: selectedItem == "Projects",
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ProjectsPage()),
+                    MaterialPageRoute(builder: (context) => ProjectScreen()),
                   ),
                 ),
                 _buildSidebarItem(

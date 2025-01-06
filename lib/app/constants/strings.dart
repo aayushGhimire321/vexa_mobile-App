@@ -32,7 +32,7 @@ class AppStrings {
   static const String emailLabel = 'Email';
   static const String sendResetLinkButton = 'Send Reset Link';
   static const String successMessage = 'Password reset link sent to';
-  static const String errorMessage = 'Please enter a valid email address';
+  static const String errorMessage = 'An error occured';
   static const String genericErrorMessage = 'Something went wrong. Please try again later.';
 
   static const String dashboardTitle = "Dashboard";
@@ -54,5 +54,17 @@ class AppStrings {
   // Error Messages
   static const String featureNotImplemented = "Feature not implemented yet.";
   static const String failedToLoadData = "Failed to load dashboard data.";
+
+
+  static const String appTitle = "Projects";
+  static const String allCategory = "All";
+  static const String workingCategory = "Working";
+  static const String inProgressCategory = "In Progress";
+  static const String completedCategory = "Completed";
+  static const String loadingMessage = "Loading projects...";
+  static const String noProjectsMessage = "No projects available.";
+  static const String descriptionLabel = "Description";
+  static const String statusLabel = "Status";
+  static const String tagsLabel = "Tags";
 }
 
