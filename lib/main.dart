@@ -1,6 +1,12 @@
 
 import 'package:flutter/material.dart';
 
+import 'package:vexa/features/splash/presentation/view/splash_screen.dart';
+import 'core/theme/theme.dart';
+import 'features/auth/presentation/view/login_screen.dart';
+import 'features/onboarding/presentation/view/onboarding_screen.dart';
+
+
 void main() {
   runApp(const VexaApp());
 }

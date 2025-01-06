@@ -1,16 +1,22 @@
-# vexa
+Vexa 
+a. Project Introduction
+The Vexa Mobile App is a dynamic and user-centric mobile extension of the Vexa Project Management
+platform, designed to enhance accessibility and efficiency for professionals and teams. Built to
+complement the web application, the mobile app ensures that users can manage their projects, tasks, and teams seamlessly from anywhere, enabling a flexible and productive workflow.
 
-A new Flutter project.
+b. Features of the project
+Vexa has a number of features aimed at improving teamwork and project management:
+Project management is the creation, modification, and real-time monitoring of projects.
+1. Teamwork: Use integrated chat and discussion platforms to let people communicate with each
+other.
+2. Time tracking: To guarantee effective resource use, keep track of the amount of time spent on
+tasks.
+3. Notifications: Get timely notifications about deadlines and project updates.
+4. Mobile Accessibility: Use a mobile application to access project data and work together while
+on the go.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+I have been working in this flow 
+![WhatsApp Image 2025-01-05 at 09 09 14_2a294508](https://github.com/user-attachments/assets/5b4b2bce-0465-4ce9-9c58-2a98e1887883)
