@@ -5,7 +5,7 @@ import '../../features/dashboard/presentation/view/dashboard_screen.dart';
 import '../../features/dashboard/presentation/view/projects_page.dart';
 import '../../features/dashboard/presentation/view/your_works_page.dart';
 import '../../features/settings/presentation/view/settings_page.dart';
-import '../../features/teams/presentation/new_team_page.dart';
+import '../../features/teams/presentation/view/new_team_page.dart';
 
 class Sidebar extends StatelessWidget {
   final Function(String) onItemSelected;
