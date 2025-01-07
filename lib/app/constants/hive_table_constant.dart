@@ -3,7 +3,7 @@ class HiveTableConstant {
 
   // Auth Feature
   static const int authTableId = 0;
-  static const String authBox = 'authBox';
+  static const String userBox = 'userBox';
 
   // Community Feature
   static const int communityTableId = 1;
@@ -32,4 +32,5 @@ class HiveTableConstant {
   // Teams Feature
   static const int teamsTableId = 6;
   static const String teamsBox = 'teamsBox';
+
 }
