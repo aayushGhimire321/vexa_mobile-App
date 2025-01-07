@@ -3,6 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:vexa/app/constants/strings.dart';
 
+import '../view_model/profile_screen/profile_screen_bloc.dart';
+import '../view_model/profile_screen/profile_screen_event.dart';
+import '../view_model/profile_screen/profile_screen_state.dart';
+
 class ProfileScreen extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();

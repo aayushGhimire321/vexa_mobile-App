@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vexa/app/constants/strings.dart';
+import 'package:vexa/features/settings/presentation/view/profile_screen.dart';
 
 
 import '../view_model/settings/settings_bloc.dart';
