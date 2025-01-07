@@ -16,7 +16,7 @@ tasks.
 on the go.
 
 
-Clean Architecture design
-![image](https://github.com/user-attachments/assets/b5d568a4-a4e3-483c-9a66-15852df9307e)
 
 
+I have been working in this flow 
+![WhatsApp Image 2025-01-05 at 09 09 14_2a294508](https://github.com/user-attachments/assets/5b4b2bce-0465-4ce9-9c58-2a98e1887883)
