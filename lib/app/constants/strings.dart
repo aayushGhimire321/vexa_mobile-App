@@ -66,5 +66,10 @@ class AppStrings {
   static const String descriptionLabel = "Description";
   static const String statusLabel = "Status";
   static const String tagsLabel = "Tags";
+
+  static const String yourWorksTitle = "Your Works";
+  static const String noWorksMessage = "No works available.";
+  static const String loadingWorksMessage = "Loading works...";
+  static const String failedToLoadWorks = "Failed to load works.";
 }
 
