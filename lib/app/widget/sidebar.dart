@@ -74,7 +74,7 @@ class Sidebar extends StatelessWidget {
                   isSelected: selectedItem == "Your Works",
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => YourWorksPage()),
+                    MaterialPageRoute(builder: (context) => WorkScreen()),
                   ),
                 ),
                 _buildSidebarItem(
@@ -128,7 +128,7 @@ class Sidebar extends StatelessWidget {
                   isSelected: selectedItem == "Settings",
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SettingsPage()),
+                    MaterialPageRoute(builder: (context) => SettingsScreen()),
                   ),
                 ),
               ],
