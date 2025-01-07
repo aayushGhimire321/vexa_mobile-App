@@ -71,5 +71,14 @@ class AppStrings {
   static const String noWorksMessage = "No works available.";
   static const String loadingWorksMessage = "Loading works...";
   static const String failedToLoadWorks = "Failed to load works.";
+
+  // Settings Page
+  static const String settingsTitle = "Settings";
+  static const String darkMode = "Dark Mode";
+  static const String notifications = "Notifications";
+  static const String profile = "Profile";
+  static const String about = "About";
+  static const String aboutDescription = "Vexa is a project management app designed to simplify teamwork.";
+
 }
 
