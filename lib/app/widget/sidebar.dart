@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vexa/features/community/presentation/view/community_page.dart';
 
 import '../../features/dashboard/presentation/view/dashboard_screen.dart';
 import '../../features/dashboard/presentation/view/projects_page.dart';
@@ -74,7 +75,7 @@ class Sidebar extends StatelessWidget {
                   isSelected: selectedItem == "Your Works",
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => YourWorksPage()),
+                    MaterialPageRoute(builder: (context) => WorkScreen()),
                   ),
                 ),
                 _buildSidebarItem(
@@ -84,7 +85,7 @@ class Sidebar extends StatelessWidget {
                   isSelected: selectedItem == "Community",
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => CommunityPage()),
+                    MaterialPageRoute(builder: (context) => CommunityScreen()),
                   ),
                 ),
                 Divider(color: Colors.white24, thickness: 1),
@@ -128,7 +129,7 @@ class Sidebar extends StatelessWidget {
                   isSelected: selectedItem == "Settings",
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SettingsPage()),
+                    MaterialPageRoute(builder: (context) => SettingsScreen()),
                   ),
                 ),
               ],
