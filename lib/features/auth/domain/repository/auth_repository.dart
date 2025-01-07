@@ -1,3 +1,4 @@
+
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/error/failure.dart';
@@ -8,3 +9,4 @@ abstract interface class IUserRepository {
   Future<Either<Failure, List<UserEntity>>> getAllUsers();
   Future<Either<Failure, void>> deleteUser(String userId);
 }
+
