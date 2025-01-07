@@ -100,5 +100,6 @@ class AppStrings {
   static const String createTeamButton = "Create Team";
   static const String noTeamsMessage = "No teams available.";
 
+
 }
 
