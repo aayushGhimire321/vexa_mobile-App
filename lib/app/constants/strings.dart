@@ -85,5 +85,12 @@ class AppStrings {
   static const String updateProfileButton = "Update Profile";
   static const String profileUpdateSuccess = "Profile updated successfully!";
   static const String profileUpdateFailure = "Failed to update profile";
+
+
+  // Community Screen
+  static const String communityTitle = "Community";
+  static const String newPostPlaceholder = "What's on your mind?";
+  static const String postButton = "Post";
+  static const String likeButton = "Like";
 }
 
