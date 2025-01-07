@@ -107,7 +107,7 @@ class Sidebar extends StatelessWidget {
                   isSelected: selectedItem == "New Team",
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => NewTeamPage()),
+                    MaterialPageRoute(builder: (context) => TeamsScreen()),
                   ),
                 ),
                 Divider(color: Colors.white24, thickness: 1),
