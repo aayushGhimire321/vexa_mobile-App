@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vexa/app/constants/strings.dart';
 
-import '../view_model/settings_bloc.dart';
-import '../view_model/settings_event.dart';
-import '../view_model/settings_state.dart'; // Use your AppStrings
+
+import '../view_model/settings/settings_bloc.dart';
+import '../view_model/settings/settings_event.dart';
+import '../view_model/settings/settings_state.dart'; // Use your AppStrings
 
 
 class SettingsScreen extends StatelessWidget {

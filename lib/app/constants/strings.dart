@@ -80,5 +80,10 @@ class AppStrings {
   static const String about = "About";
   static const String aboutDescription = "Vexa is a project management app designed to simplify teamwork.";
 
+  // Profile Screen
+  static const String nameLabel = "Name";
+  static const String updateProfileButton = "Update Profile";
+  static const String profileUpdateSuccess = "Profile updated successfully!";
+  static const String profileUpdateFailure = "Failed to update profile";
 }
 
