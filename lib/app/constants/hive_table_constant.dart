@@ -15,6 +15,8 @@ class HiveTableConstant {
   static const String dashboardScreenBox = 'dashboardScreenBox';  // For the Dashboard screen data
   static const String projectPageBox = 'projectPageBox';          // For the Project page data
   static const String yourWorkPageBox = 'yourWorkPageBox';        // For the Your Work page data
+  static const String workBoxName = 'workBoxName';                // For the "Work" feature data
+  static const String projectBoxName = 'projectBoxName';          // For the "Project" feature data
 
   // Onboarding Feature
   static const int onboardingTableId = 3;
