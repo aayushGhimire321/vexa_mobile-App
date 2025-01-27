@@ -5,9 +5,9 @@ import 'package:vexa/features/splash/presentation/view_model/splash_cubit.dart';
 
 import '../core/theme/theme.dart';
 import '../features/splash/presentation/view/splash_screen.dart';
+import 'di/di.dart';
 
-// Initialize GetIt
-final GetIt getIt = GetIt.instance;
+//
 
 class App extends StatelessWidget {
   const App({super.key});

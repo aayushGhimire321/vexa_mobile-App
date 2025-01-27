@@ -1,5 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:vexa/core/network/api_service.dart';
 
+import '../../core/network/hive_service.dart';
 import '../../features/auth/presentation/view_model/forget_password/forgot_password_bloc.dart';
 import '../../features/auth/presentation/view_model/login/login_bloc.dart';
 import '../../features/auth/presentation/view_model/register/register_bloc.dart';
@@ -14,6 +17,8 @@ import '../../features/teams/presentation/view_model/new_team_page_bloc.dart';
 final getIt = GetIt.instance;
 
 Future<void> initDependencies() async {
+  await _initHiveService();
+  await _initApiService();
   await _initAuthDependencies();
   await _initCommunityDependencies();
   await _initDashboardDependencies();
@@ -21,6 +26,15 @@ Future<void> initDependencies() async {
   await _initSettingsDependencies();
   await _initSplashScreenDependencies();
   await _initTeamsDependencies();
+}
+_initHiveService() {
+  getIt.registerLazySingleton<HiveService>(() => HiveService());
+}
+
+_initApiService() {
+  getIt.registerLazySingleton<Dio>(
+        () => ApiService(Dio()).dio,
+  );
 }
 
 _initAuthDependencies() async {
