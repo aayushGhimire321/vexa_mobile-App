@@ -55,4 +55,49 @@ class AuthLocalDataSource implements IAuthLocalDataSource {
       throw Exception('Failed to update user: $e');
     }
   }
+
+  @override
+  Future<UserEntity?> loginUser(String username, String password) async {
+    try {
+      final userHiveModel = await _hiveService.getUserById(username);
+      if (userHiveModel == null) {
+        throw Exception('User not found.');
+      }
+      if (userHiveModel.password == password) {
+        return userHiveModel.toEntity();
+      } else {
+        throw Exception('Invalid password.');
+      }
+    } catch (e) {
+      throw Exception('Failed to login user: $e');
+    }
+  }
+
+  @override
+  Future<void> registerUser(UserEntity userEntity) async {
+    try {
+      final existingUser = await _hiveService.getUserById(userEntity.username);
+      if (existingUser != null) {
+        throw Exception('Username already exists.');
+      }
+      final userHiveModel = AuthHiveModel.fromEntity(userEntity);
+      await _hiveService.addUser(userHiveModel);
+    } catch (e) {
+      throw Exception('Failed to register user: $e');
+    }
+  }
+
+  @override
+  Future<void> forgetPassword(String username, String newPassword) async {
+    try {
+      final userHiveModel = await _hiveService.getUserById(username);
+      if (userHiveModel == null) {
+        throw Exception('User not found.');
+      }
+      userHiveModel.password = newPassword;
+      await _hiveService.updateUser(userHiveModel);
+    } catch (e) {
+      throw Exception('Failed to reset password: $e');
+    }
+  }
 }

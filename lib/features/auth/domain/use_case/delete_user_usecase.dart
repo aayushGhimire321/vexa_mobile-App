@@ -5,7 +5,6 @@ import '../../../../app/usecase/usecase.dart';
 import '../../../../core/error/failure.dart';
 import '../repository/auth_repository.dart';
 
-
 class DeleteUserParams extends Equatable {
   final String userId;
 
@@ -18,13 +17,17 @@ class DeleteUserParams extends Equatable {
   List<Object?> get props => [userId];
 }
 
-class DeleteUserUsecase implements UsecaseWithParams<void, DeleteUserParams> {
-  final IUserRepository userRepository;
+class DeleteUserUsecase implements UsecaseWithParams<String, DeleteUserParams> {
+  final IAuthRepository userRepository;
 
   DeleteUserUsecase(this.userRepository);
 
   @override
-  Future<Either<Failure, void>> call(DeleteUserParams params) async {
-    return await userRepository.deleteUser(params.userId);
+  Future<Either<Failure, String>> call(DeleteUserParams params) async {
+    final result = await userRepository.deleteUser(params.userId);
+    return result.fold(
+          (failure) => Left(failure), // Return failure if deletion fails
+          (success) => Right('User deleted successfully'), // Success case
+    );
   }
 }

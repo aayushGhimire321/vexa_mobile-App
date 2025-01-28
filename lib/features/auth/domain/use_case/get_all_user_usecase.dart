@@ -15,7 +15,7 @@ class GetAllUsersParams extends Equatable {
 }
 
 class GetAllUsersUsecase implements UsecaseWithoutParams<List<UserEntity>> {
-  final IUserRepository userRepository;
+  final IAuthRepository userRepository;
 
   GetAllUsersUsecase(this.userRepository);
 

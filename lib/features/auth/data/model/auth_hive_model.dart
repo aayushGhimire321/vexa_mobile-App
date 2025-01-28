@@ -1,12 +1,12 @@
-
 import 'package:hive/hive.dart';
+import 'package:equatable/equatable.dart'; // Add the equatable package for using props.
 
 import '../../domain/entity/auth_entity.dart';
 
 part 'auth_hive_model.g.dart'; // Generate using build_runner
 
 @HiveType(typeId: 0)
-class AuthHiveModel {
+class AuthHiveModel extends Equatable {
   @HiveField(0)
   final String? userId; // Make userId nullable
 
@@ -17,10 +17,10 @@ class AuthHiveModel {
   final String email;
 
   @HiveField(3)
-  final String password;
+  late final String password;
 
   AuthHiveModel({
-    required this.userId, // Adjust if nullable
+    required this.userId,
     required this.username,
     required this.email,
     required this.password,
@@ -28,7 +28,7 @@ class AuthHiveModel {
 
   factory AuthHiveModel.fromEntity(UserEntity entity) {
     return AuthHiveModel(
-      userId: entity.userId, // entity.id is nullable, so this matches
+      userId: entity.userId,
       username: entity.username,
       email: entity.email,
       password: entity.password,
@@ -37,10 +37,13 @@ class AuthHiveModel {
 
   UserEntity toEntity() {
     return UserEntity(
-      userId: userId, // Pass nullable userId
+      userId: userId,
       username: username,
       email: email,
       password: password,
     );
   }
+
+  @override
+  List<Object?> get props => [userId, username, email, password];
 }
