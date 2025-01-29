@@ -1,19 +1,53 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../../../app/constants/strings.dart';
 import '../../../../app/widget/CustomTextField.dart';
 import '../../../../app/widget/custom_button.dart';
- // Import the constants file
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
 
+  File? _profileImage;
+
+  // Check camera permission
+  checkCameraPermission() async {
+    if (await Permission.camera.request().isDenied ||
+        await Permission.camera.request().isRestricted) {
+      await Permission.camera.request();
+    }
+  }
+
+  // Browse image from camera or gallery
+  Future _browseImage(ImageSource imageSource) async {
+    try {
+      final image = await ImagePicker().pickImage(source: imageSource);
+      if (image != null) {
+        setState(() {
+          _profileImage = File(image.path);
+        });
+      } else {
+        return;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor, // Set the background color here
+      backgroundColor: Theme.of(context).primaryColor,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -21,44 +55,73 @@ class RegisterScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               const SizedBox(height: 40),
-              Image.asset(
-                AppStrings.registerImage, // Use the constant here
-                height: 160,
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'Registration',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              InkWell(
+                onTap: () {
+                  showModalBottomSheet(
+                    backgroundColor: Colors.grey[300],
+                    context: context,
+                    isScrollControlled: true,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                    ),
+                    builder: (context) => Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              checkCameraPermission();
+                              _browseImage(ImageSource.camera);
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.camera),
+                            label: const Text('Camera'),
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              checkCameraPermission();
+                              _browseImage(ImageSource.gallery);
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.image),
+                            label: const Text('Gallery'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+                child: SizedBox(
+                  height: 200,
+                  width: 200,
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage: _profileImage != null
+                        ? FileImage(_profileImage!)
+                        : const AssetImage('assets/images/profile.png')
+                    as ImageProvider,
+                  ),
                 ),
               ),
-              const SizedBox(height: 10),
-              const Text(
-                'Register with the proper credentials',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.white70,
-                ),
-              ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 25),
               CustomTextField(
                 hintText: 'Username',
-                controller: usernameController, // Assign controller
+                controller: usernameController,
               ),
               const SizedBox(height: 10),
               CustomTextField(
                 hintText: 'Password',
                 obscureText: true,
-                controller: passwordController, // Assign controller
+                controller: passwordController,
               ),
               const SizedBox(height: 10),
               CustomTextField(
                 hintText: 'Confirm Password',
                 obscureText: true,
-                controller: confirmPasswordController, // Assign controller
+                controller: confirmPasswordController,
               ),
               const SizedBox(height: 20),
               CustomButton(
@@ -81,6 +144,19 @@ class RegisterScreen extends StatelessWidget {
                     return;
                   }
 
+                  if (_profileImage == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Please select a profile picture',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    return;
+                  }
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text(
@@ -91,8 +167,7 @@ class RegisterScreen extends StatelessWidget {
                     ),
                   );
 
-                  // Navigate to the login screen
-                  Navigator.pop(context);
+                  Navigator.pop(context); // Navigate to the login screen
                 },
               ),
               const SizedBox(height: 10),

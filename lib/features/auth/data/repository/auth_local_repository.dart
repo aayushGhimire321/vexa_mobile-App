@@ -1,62 +1,130 @@
-import 'package:dartz/dartz.dart';
-import '../../../../core/error/failure.dart';
+import 'dart:io';
+import '../../../../../core/network/hive_service.dart';
+
 import '../../domain/entity/auth_entity.dart';
-import '../data_source/local_datasource/local_datasource.dart';
-import 'auth_repository.dart';
+import '../data_source/local_data_source.dart';
+import '../model/auth_hive_model.dart';
 
-class AuthLocalRepository implements IAuthRepository {
-  final AuthLocalDataSource _authLocalDataSource;
-
-  AuthLocalRepository({required AuthLocalDataSource authLocalDataSource})
-      : _authLocalDataSource = authLocalDataSource;
+class AuthLocalDataSource implements IAuthLocalDataSource {
+  final HiveService _hiveService;
+  AuthLocalDataSource(this._hiveService);
 
   @override
-  Future<Either<Failure, void>> createUser(UserEntity user) async {
+  Future<void> createUser(UserEntity userEntity) async {
     try {
-      await _authLocalDataSource.createUser(user);
-      return Right(null);
+      final userHiveModel = AuthHiveModel.fromEntity(userEntity);
+      await _hiveService.addUser(userHiveModel);
     } catch (e) {
-      return Left(LocalDatabaseFailure(message: 'Error creating user: $e'));
+      throw Exception('Failed to create user: $e');
     }
   }
 
   @override
-  Future<Either<Failure, void>> deleteUser(String userId) async {
+  Future<void> deleteUser(String userId) async {
     try {
-      await _authLocalDataSource.deleteUser(userId);
-      return Right(null);
+      await _hiveService.deleteUser(userId);
     } catch (e) {
-      return Left(LocalDatabaseFailure(message: 'Error deleting user: $e'));
+      throw Exception('Failed to delete user: $e');
+    }
+  }
+
+  Future<UserEntity> getCurrentUser() {
+    // Return Empty AuthEntity
+    return Future.value(const UserEntity(
+      userId: "1",
+      image: "",
+      password: "",
+      email: '',
+      username: '',
+    ));
+  }
+
+  @override
+  Future<List<UserEntity>> getAllUsers() async {
+    try {
+      final usersHiveModels = await _hiveService.getAllUsers();
+      return usersHiveModels.map((e) => e.toEntity()).toList();
+    } catch (e) {
+      throw Exception('Failed to fetch all users: $e');
     }
   }
 
   @override
-  Future<Either<Failure, List<UserEntity>>> getAllUsers() async {
+  Future<UserEntity?> getUserById(String userId) async {
     try {
-      final users = await _authLocalDataSource.getAllUsers();
-      return Right(users);
+      final userHiveModel = await _hiveService.getUserById(userId);
+      return userHiveModel?.toEntity();
     } catch (e) {
-      return Left(LocalDatabaseFailure(message: 'Error getting all users: $e'));
+      throw Exception('Failed to fetch user: $e');
     }
   }
 
   @override
-  Future<Either<Failure, UserEntity?>> getUserById(String userId) async {
+  Future<void> updateUser(UserEntity userEntity) async {
     try {
-      final user = await _authLocalDataSource.getUserById(userId);
-      return Right(user);
+      final userHiveModel = AuthHiveModel.fromEntity(userEntity);
+      await _hiveService.updateUser(userHiveModel);
     } catch (e) {
-      return Left(LocalDatabaseFailure(message: 'Error fetching user by ID: $e'));
+      throw Exception('Failed to update user: $e');
     }
   }
 
-  @override
-  Future<Either<Failure, void>> updateUser(UserEntity user) async {
+  Future<UserEntity?> loginUser(String username, String password) async {
     try {
-      await _authLocalDataSource.updateUser(user);
-      return Right(null);
+      final userHiveModel = await _hiveService.getUserById(username);
+      if (userHiveModel == null) {
+        throw Exception('User not found.');
+      }
+      if (userHiveModel.password == password) {
+        return userHiveModel.toEntity();
+      } else {
+        throw Exception('Invalid password.');
+      }
     } catch (e) {
-      return Left(LocalDatabaseFailure(message: 'Error updating user: $e'));
+      throw Exception('Failed to login user: $e');
+    }
+  }
+
+  Future<void> registerUser(UserEntity userEntity) async {
+    try {
+      final existingUser = await _hiveService.getUserById(userEntity.username);
+      if (existingUser != null) {
+        throw Exception('Username already exists.');
+      }
+      final userHiveModel = AuthHiveModel.fromEntity(userEntity);
+      await _hiveService.addUser(userHiveModel);
+    } catch (e) {
+      throw Exception('Failed to register user: $e');
+    }
+  }
+
+  Future<void> forgetPassword(String username, String newPassword) async {
+    try {
+      final userHiveModel = await _hiveService.getUserById(username);
+      if (userHiveModel == null) {
+        throw Exception('User not found.');
+      }
+      userHiveModel.password = newPassword;
+      await _hiveService.updateUser(userHiveModel);
+    } catch (e) {
+      throw Exception('Failed to reset password: $e');
+    }
+  }
+
+  Future<String> uploadProfilePicture(File file) {
+    throw UnimplementedError();
+  }
+
+  // Validate login credentials: Checks username and password
+  Future<bool> validateLogin(String username, String password) async {
+    try {
+      final userHiveModel = await _hiveService.getUserById(username);
+      if (userHiveModel == null) {
+        return false; // User not found
+      }
+      return userHiveModel.password == password; // Check password match
+    } catch (e) {
+      throw Exception('Failed to validate login: $e');
     }
   }
 }

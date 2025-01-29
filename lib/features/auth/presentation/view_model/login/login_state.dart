@@ -1,26 +1,33 @@
+// login_state.dart
 import 'package:equatable/equatable.dart';
 
-/// Base State Class
+import '../../../domain/entity/auth_entity.dart';
+
 abstract class LoginState extends Equatable {
+  const LoginState();
+
   @override
   List<Object?> get props => [];
 }
 
-/// Initial state when the screen loads
 class LoginInitial extends LoginState {}
 
-/// State when login is in progress
 class LoginLoading extends LoginState {}
 
-/// State when login is successful
-class LoginSuccess extends LoginState {}
+class LoginSuccess extends LoginState {
+  final UserEntity user;
 
-/// State when login fails
-class LoginFailure extends LoginState {
-  final String error;
-
-  LoginFailure(this.error);
+  const LoginSuccess({required this.user});
 
   @override
-  List<Object?> get props => [error];
+  List<Object?> get props => [user];
+}
+
+class LoginFailure extends LoginState {
+  final String message;
+
+  const LoginFailure({required this.message});
+
+  @override
+  List<Object?> get props => [message];
 }

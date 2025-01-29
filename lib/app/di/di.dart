@@ -39,8 +39,13 @@ _initApiService() {
 
 _initAuthDependencies() async {
   // Register login, signup, and forget_password blocs
-  getIt.registerFactory<LoginBloc>(() => LoginBloc());
-  getIt.registerFactory<RegisterBloc>(() => RegisterBloc());
+  getIt.registerFactory<LoginBloc>(() => LoginBloc(
+    loginUseCase: getIt(),
+  ));
+  getIt.registerFactory<RegisterBloc>(() => RegisterBloc(
+    registerUseCase: getIt(),
+    uploadImageUsecase: getIt(),
+  ));
   getIt.registerFactory<ForgotPasswordBloc>(() => ForgotPasswordBloc());
 }
 

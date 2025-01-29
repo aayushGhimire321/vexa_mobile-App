@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:vexa/app/constants/strings.dart';
-import 'package:vexa/features/auth/presentation/view/register_screen.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../app/widget/CustomTextField.dart';
 import '../../../../app/widget/custom_button.dart';
 import '../../../dashboard/presentation/view/dashboard_screen.dart';
+import '../view_model/login/login_bloc.dart';
+import '../view_model/login/login_event.dart';
+import '../view_model/login/login_state.dart';
 import 'forget_password.dart';
- // Import the constants file
+import 'register_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController usernameController = TextEditingController();
@@ -24,7 +25,7 @@ class LoginScreen extends StatelessWidget {
             children: <Widget>[
               const SizedBox(height: 40),
               Image.asset(
-                AppStrings.loginImage, // Use the constant here
+                'assets/login_image.png', // Placeholder
                 height: 160,
               ),
               const SizedBox(height: 10),
@@ -62,8 +63,7 @@ class LoginScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => ForgotPasswordScreen()),
+                      MaterialPageRoute(builder: (context) => ForgotPasswordScreen()),
                     );
                   },
                   child: Text(
@@ -76,19 +76,21 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              CustomButton(
-                text: 'Login',
-                onPressed: () {
-                  String username = usernameController.text.trim();
-                  String password = passwordController.text.trim();
+              BlocConsumer<LoginBloc, LoginState>(
+                listener: (context, state) {
+                  if (state is LoginFailure) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Invalid credentials: ${state.message}'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
 
-                  if (username == "Aayush" && password == "12345") {
+                  if (state is LoginSuccess) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text(
-                          'Logged in successfully',
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        content: Text('Logged in successfully'),
                         backgroundColor: Colors.green,
                       ),
                     );
@@ -96,17 +98,25 @@ class LoginScreen extends StatelessWidget {
                       context,
                       MaterialPageRoute(builder: (context) => DashboardScreen()),
                     );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'Invalid credentials',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
                   }
+                },
+                builder: (context, state) {
+                  if (state is LoginLoading) {
+                    return const CircularProgressIndicator();
+                  }
+
+                  return CustomButton(
+                    text: 'Login',
+                    onPressed: () {
+                      String username = usernameController.text.trim();
+                      String password = passwordController.text.trim();
+
+                      // Dispatch the LoginRequested event
+                      BlocProvider.of<LoginBloc>(context).add(
+                        LoginRequested(username: username, password: password),
+                      );
+                    },
+                  );
                 },
               ),
               const SizedBox(height: 10),
