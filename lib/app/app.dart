@@ -25,7 +25,7 @@ class App extends StatelessWidget {
           value: getIt<SplashCubit>(),
           child: const SplashScreen(),
         ),
-        '/login': (context) => LoginScreen(loginUseCase: getIt<LoginUseCase>()), // Pass loginUseCase here
+        '/login': (context) => LoginScreen(), // Pass loginUseCase here
         '/register': (context) =>  RegisterScreen(), // Register screen route
         't_password': (context) => ForgotPasswordScreen(), // Forget Password screen route
         '/dashboard': (context) => DashboardScreen(), // Dashboard screen route

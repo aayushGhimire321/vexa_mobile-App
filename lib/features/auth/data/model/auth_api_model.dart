@@ -35,7 +35,7 @@ class AuthApiModel {
     return UserEntity(
       username: username,
       email: email,
-      password: password, image: null,
+      password: password, image: '',
     );
   }
 

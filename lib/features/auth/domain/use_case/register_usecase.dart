@@ -34,7 +34,7 @@ class RegisterUseCase {
     final authEntity = UserEntity(
       email: params.email,
       username: params.username,
-      password: params.password, image: null,
+      password: params.password, image: '',
     );
 
     // Call the repository method to register the user

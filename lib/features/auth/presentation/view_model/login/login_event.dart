@@ -1,18 +1,21 @@
+// login_event.dart
 import 'package:equatable/equatable.dart';
 
-/// Base Event Class
 abstract class LoginEvent extends Equatable {
+  const LoginEvent();
+
   @override
   List<Object?> get props => [];
 }
 
-/// Event: When the user submits the login form
-class LoginSubmitted extends LoginEvent {
+class LoginRequested extends LoginEvent {
   final String username;
   final String password;
 
-  LoginSubmitted({required this.username, required this.password});
+  const LoginRequested({required this.username, required this.password});
 
   @override
   List<Object?> get props => [username, password];
 }
+
+class LoginLogoutRequested extends LoginEvent {}

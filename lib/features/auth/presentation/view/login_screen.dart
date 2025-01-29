@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:vexa/app/constants/strings.dart';
-import 'package:vexa/features/auth/presentation/view/register_screen.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../app/widget/CustomTextField.dart';
 import '../../../../app/widget/custom_button.dart';
 import '../../../dashboard/presentation/view/dashboard_screen.dart';
-import '../../domain/use_case/login_usecase.dart';
+import '../view_model/login/login_bloc.dart';
+import '../view_model/login/login_event.dart';
+import '../view_model/login/login_state.dart';
 import 'forget_password.dart';
+import 'register_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
-  // Assuming you have a login use case that interacts with your backend service
-  final LoginUseCase loginUseCase;
-
-  // Constructor that accepts the LoginUseCase
-  LoginScreen({required this.loginUseCase});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +25,7 @@ class LoginScreen extends StatelessWidget {
             children: <Widget>[
               const SizedBox(height: 40),
               Image.asset(
-                AppStrings.loginImage, // Use the constant here
+                'assets/login_image.png', // Placeholder
                 height: 160,
               ),
               const SizedBox(height: 10),
@@ -68,8 +63,7 @@ class LoginScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => ForgotPasswordScreen()),
+                      MaterialPageRoute(builder: (context) => ForgotPasswordScreen()),
                     );
                   },
                   child: Text(
@@ -82,42 +76,44 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              CustomButton(
-                text: 'Login',
-                onPressed: () async {
-                  String username = usernameController.text.trim();
-                  String password = passwordController.text.trim();
+              BlocConsumer<LoginBloc, LoginState>(
+                listener: (context, state) {
+                  if (state is LoginFailure) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Invalid credentials: ${state.message}'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
 
-                  // Call the login use case to authenticate the user
-                  final result = await loginUseCase(LoginParams(username: username, password: password));
+                  if (state is LoginSuccess) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Logged in successfully'),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => DashboardScreen()),
+                    );
+                  }
+                },
+                builder: (context, state) {
+                  if (state is LoginLoading) {
+                    return const CircularProgressIndicator();
+                  }
 
-                  result.fold(
-                        (failure) {
-                      // Show error if login fails
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            'Invalid credentials: ${failure.message}',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    },
-                        (user) {
-                      // If login succeeds, navigate to the dashboard
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            'Logged in successfully',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          backgroundColor: Colors.green,
-                        ),
-                      );
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => DashboardScreen()),
+                  return CustomButton(
+                    text: 'Login',
+                    onPressed: () {
+                      String username = usernameController.text.trim();
+                      String password = passwordController.text.trim();
+
+                      // Dispatch the LoginRequested event
+                      BlocProvider.of<LoginBloc>(context).add(
+                        LoginRequested(username: username, password: password),
                       );
                     },
                   );

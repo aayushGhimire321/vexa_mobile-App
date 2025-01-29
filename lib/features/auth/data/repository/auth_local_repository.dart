@@ -32,7 +32,7 @@ class AuthLocalDataSource implements IAuthLocalDataSource {
     // Return Empty AuthEntity
     return Future.value(const UserEntity(
       userId: "1",
-      image: null,
+      image: "",
       password: "",
       email: '',
       username: '',
