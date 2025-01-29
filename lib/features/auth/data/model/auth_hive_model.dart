@@ -40,7 +40,7 @@ class AuthHiveModel extends Equatable {
       userId: userId,
       username: username,
       email: email,
-      password: password,
+      password: password, image: null,
     );
   }
 

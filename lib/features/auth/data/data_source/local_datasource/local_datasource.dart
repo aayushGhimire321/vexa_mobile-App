@@ -1,3 +1,4 @@
+import 'dart:io';
 import '../../../../../core/network/hive_service.dart';
 import '../../../domain/entity/auth_entity.dart';
 import '../../model/auth_hive_model.dart';
@@ -24,6 +25,17 @@ class AuthLocalDataSource implements IAuthLocalDataSource {
     } catch (e) {
       throw Exception('Failed to delete user: $e');
     }
+  }
+
+  Future<UserEntity> getCurrentUser() {
+    // Return Empty AuthEntity
+    return Future.value(const UserEntity(
+      userId: "1",
+      image: null,
+      password: "",
+      email: '',
+      username: '',
+    ));
   }
 
   @override
@@ -56,7 +68,6 @@ class AuthLocalDataSource implements IAuthLocalDataSource {
     }
   }
 
-  @override
   Future<UserEntity?> loginUser(String username, String password) async {
     try {
       final userHiveModel = await _hiveService.getUserById(username);
@@ -73,7 +84,6 @@ class AuthLocalDataSource implements IAuthLocalDataSource {
     }
   }
 
-  @override
   Future<void> registerUser(UserEntity userEntity) async {
     try {
       final existingUser = await _hiveService.getUserById(userEntity.username);
@@ -87,7 +97,6 @@ class AuthLocalDataSource implements IAuthLocalDataSource {
     }
   }
 
-  @override
   Future<void> forgetPassword(String username, String newPassword) async {
     try {
       final userHiveModel = await _hiveService.getUserById(username);
@@ -98,6 +107,23 @@ class AuthLocalDataSource implements IAuthLocalDataSource {
       await _hiveService.updateUser(userHiveModel);
     } catch (e) {
       throw Exception('Failed to reset password: $e');
+    }
+  }
+
+  Future<String> uploadProfilePicture(File file) {
+    throw UnimplementedError();
+  }
+
+  // Validate login credentials: Checks username and password
+  Future<bool> validateLogin(String username, String password) async {
+    try {
+      final userHiveModel = await _hiveService.getUserById(username);
+      if (userHiveModel == null) {
+        return false; // User not found
+      }
+      return userHiveModel.password == password; // Check password match
+    } catch (e) {
+      throw Exception('Failed to validate login: $e');
     }
   }
 }

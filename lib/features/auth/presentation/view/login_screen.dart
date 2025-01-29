@@ -5,12 +5,18 @@ import 'package:vexa/features/auth/presentation/view/register_screen.dart';
 import '../../../../app/widget/CustomTextField.dart';
 import '../../../../app/widget/custom_button.dart';
 import '../../../dashboard/presentation/view/dashboard_screen.dart';
+import '../../domain/use_case/login_usecase.dart';
 import 'forget_password.dart';
- // Import the constants file
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  // Assuming you have a login use case that interacts with your backend service
+  final LoginUseCase loginUseCase;
+
+  // Constructor that accepts the LoginUseCase
+  LoginScreen({required this.loginUseCase});
 
   @override
   Widget build(BuildContext context) {
@@ -78,35 +84,43 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 20),
               CustomButton(
                 text: 'Login',
-                onPressed: () {
+                onPressed: () async {
                   String username = usernameController.text.trim();
                   String password = passwordController.text.trim();
 
-                  if (username == "Aayush" && password == "12345") {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'Logged in successfully',
-                          style: TextStyle(color: Colors.white),
+                  // Call the login use case to authenticate the user
+                  final result = await loginUseCase(LoginParams(username: username, password: password));
+
+                  result.fold(
+                        (failure) {
+                      // Show error if login fails
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Invalid credentials: ${failure.message}',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          backgroundColor: Colors.red,
                         ),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => DashboardScreen()),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'Invalid credentials',
-                          style: TextStyle(color: Colors.white),
+                      );
+                    },
+                        (user) {
+                      // If login succeeds, navigate to the dashboard
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Logged in successfully',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          backgroundColor: Colors.green,
                         ),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
+                      );
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => DashboardScreen()),
+                      );
+                    },
+                  );
                 },
               ),
               const SizedBox(height: 10),

@@ -1,182 +1,120 @@
-import 'package:dio/dio.dart';
-import '../../../../../app/constants/api_endpoints.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import '../../../../../app/constants/server_exception.dart';
 import '../../../domain/entity/auth_entity.dart';
 import '../../model/auth_api_model.dart';
 import '../local_data_source.dart';
 
-class AuthRemoteDataSource implements IAuthLocalDataSource {
-  final Dio _dio;
+abstract class AuthRemoteDataSource implements IAuthLocalDataSource {
+  final String baseUrl;
+  final http.Client client;
 
-  AuthRemoteDataSource(this._dio);
-
-  @override
-  Future<void> createUser(UserEntity userEntity) async {
-    try {
-      final userApiModel = AuthApiModel.fromEntity(userEntity);
-      final response = await _dio.post(
-        ApiEndpoints.signUp,
-        data: userApiModel.toJson(),
-        options: Options(headers: {'Content-Type': 'application/json'}),
-      );
-      if (response.statusCode != 201) {
-        throw Exception('Failed to create user: ${response.statusMessage}');
-      }
-    } on DioException catch (e) {
-      throw Exception('Failed to create user: ${e.message}');
-    }
-  }
+  AuthRemoteDataSource({required this.baseUrl, required this.client});
 
   @override
-  Future<void> deleteUser(String userId) async {
+  Future<void> registerUser(UserEntity userEntity) async {
+    final url = Uri.parse('$baseUrl/register');
     try {
-      final response = await _dio.delete(
-        '${ApiEndpoints.findUserByEmail}/$userId',
-        options: Options(headers: {'Content-Type': 'application/json'}),
+      final response = await client.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'username': userEntity.username,
+          'password': userEntity.password,
+          'email': userEntity.email,
+        }),
       );
+
       if (response.statusCode != 200) {
-        throw Exception('Failed to delete user: ${response.statusMessage}');
+        throw ServerException('Failed to register user: ${response.body}');
       }
-    } on DioException catch (e) {
-      throw Exception('Failed to delete user: ${e.message}');
-    }
-  }
-
-  @override
-  Future<List<UserEntity>> getAllUsers() async {
-    try {
-      final response = await _dio.get(
-        ApiEndpoints.findUserByEmail,
-        options: Options(headers: {'Content-Type': 'application/json'}),
-      );
-      if (response.statusCode == 200) {
-        final usersList = (response.data as List)
-            .map((user) => AuthApiModel.fromJson(user).toEntity())
-            .toList();
-        return usersList;
-      } else {
-        throw Exception('Failed to fetch all users: ${response.statusMessage}');
-      }
-    } on DioException catch (e) {
-      throw Exception('Failed to fetch all users: ${e.message}');
-    }
-  }
-
-  @override
-  Future<UserEntity?> getUserById(String userId) async {
-    try {
-      final response = await _dio.get(
-        '${ApiEndpoints.findUserByEmail}/$userId',
-        options: Options(headers: {'Content-Type': 'application/json'}),
-      );
-      if (response.statusCode == 200) {
-        return AuthApiModel.fromJson(response.data).toEntity();
-      } else {
-        throw Exception('User not found: ${response.statusMessage}');
-      }
-    } on DioException catch (e) {
-      throw Exception('Failed to fetch user: ${e.message}');
-    }
-  }
-
-  @override
-  Future<void> updateUser(UserEntity userEntity) async {
-    try {
-      final userApiModel = AuthApiModel.fromEntity(userEntity);
-      final response = await _dio.put(
-        ApiEndpoints.signUp, // You can change this to the correct endpoint if required
-        data: userApiModel.toJson(),
-        options: Options(headers: {'Content-Type': 'application/json'}),
-      );
-      if (response.statusCode != 200) {
-        throw Exception('Failed to update user: ${response.statusMessage}');
-      }
-    } on DioException catch (e) {
-      throw Exception('Failed to update user: ${e.message}');
+    } catch (e) {
+      throw ServerException('Failed to register user: $e');
     }
   }
 
   @override
   Future<UserEntity?> loginUser(String username, String password) async {
+    final url = Uri.parse('$baseUrl/login');
     try {
-      final response = await _dio.post(
-        ApiEndpoints.signIn,
-        data: {'email': username, 'password': password},
-        options: Options(headers: {'Content-Type': 'application/json'}),
+      final response = await client.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'username': username,
+          'password': password,
+        }),
       );
+
       if (response.statusCode == 200) {
-        return AuthApiModel.fromJson(response.data).toEntity();
+        final data = jsonDecode(response.body);
+        final user = AuthApiModel.fromJson(data);
+        return user.toEntity(); // Converts the API model to UserEntity
       } else {
-        throw Exception('Invalid login credentials: ${response.statusMessage}');
+        throw ServerException('Invalid username or password');
       }
-    } on DioException catch (e) {
-      throw Exception('Failed to login user: ${e.message}');
+    } catch (e) {
+      throw ServerException('Failed to log in: $e');
     }
   }
 
   @override
-  Future<void> registerUser(UserEntity userEntity) async {
+  Future<void> uploadProfilePicture(File file) async {
+    final url = Uri.parse('$baseUrl/uploadProfilePicture');
     try {
-      final existingUser = await getUserById(userEntity.username);
-      if (existingUser != null) {
-        throw Exception('Username already exists.');
+      final request = http.MultipartRequest('POST', url)
+        ..headers['Content-Type'] = 'multipart/form-data'
+        ..files.add(await http.MultipartFile.fromPath('file', file.path));
+
+      final response = await request.send();
+      if (response.statusCode != 200) {
+        throw ServerException('Failed to upload profile picture');
       }
-      final userApiModel = AuthApiModel.fromEntity(userEntity);
-      final response = await _dio.post(
-        ApiEndpoints.signUp,
-        data: userApiModel.toJson(),
-        options: Options(headers: {'Content-Type': 'application/json'}),
-      );
-      if (response.statusCode != 201) {
-        throw Exception('Failed to register user: ${response.statusMessage}');
-      }
-    } on DioException catch (e) {
-      throw Exception('Failed to register user: ${e.message}');
+    } catch (e) {
+      throw ServerException('Failed to upload profile picture: $e');
     }
   }
 
   @override
-  Future<void> forgetPassword(String username, String newPassword) async {
+  Future<UserEntity> getCurrentUser() async {
+    final url = Uri.parse('$baseUrl/currentUser');
     try {
-      final response = await _dio.put(
-        ApiEndpoints.resetPassword,
-        data: {'email': username, 'newPassword': newPassword},
-        options: Options(headers: {'Content-Type': 'application/json'}),
-      );
-      if (response.statusCode != 200) {
-        throw Exception('Failed to reset password: ${response.statusMessage}');
+      final response = await client.get(url);
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final user = AuthApiModel.fromJson(data);
+        return user.toEntity(); // Converts the API model to UserEntity
+      } else {
+        throw ServerException('Failed to fetch current user');
       }
-    } on DioException catch (e) {
-      throw Exception('Failed to reset password: ${e.message}');
+    } catch (e) {
+      throw ServerException('Failed to fetch current user: $e');
     }
   }
 
-  Future<void> generateOtp(String email) async {
+  @override
+  Future<List<UserEntity>> getUsersInProject(String projectId) async {
+    final url = Uri.parse('$baseUrl/project/$projectId/users');
     try {
-      final response = await _dio.post(
-        ApiEndpoints.generateOtp,
-        data: {'email': email},
-        options: Options(headers: {'Content-Type': 'application/json'}),
-      );
-      if (response.statusCode != 200) {
-        throw Exception('Failed to generate OTP: ${response.statusMessage}');
-      }
-    } on DioException catch (e) {
-      throw Exception('Failed to generate OTP: ${e.message}');
-    }
-  }
+      final response = await client.get(url);
 
-  Future<void> verifyOtp(String email, String otp) async {
-    try {
-      final response = await _dio.post(
-        ApiEndpoints.verifyOtp,
-        data: {'email': email, 'otp': otp},
-        options: Options(headers: {'Content-Type': 'application/json'}),
-      );
-      if (response.statusCode != 200) {
-        throw Exception('Failed to verify OTP: ${response.statusMessage}');
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final users = (data as List)
+            .map((userData) => AuthApiModel.fromJson(userData))
+            .toList();
+        return users.map((user) => user.toEntity()).toList();
+      } else {
+        throw ServerException('Failed to fetch users in project');
       }
-    } on DioException catch (e) {
-      throw Exception('Failed to verify OTP: ${e.message}');
+    } catch (e) {
+      throw ServerException('Failed to fetch users in project: $e');
     }
   }
 }

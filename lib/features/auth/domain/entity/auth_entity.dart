@@ -11,7 +11,7 @@ class UserEntity extends Equatable {
     this.userId,
     required this.username,
     required this.email,
-    required this.password,
+    required this.password, required image,
   });
 
   @override
