@@ -5,33 +5,30 @@ import '../../../../app/usecase/usecase.dart';
 import '../../../../core/error/failure.dart';
 import '../repository/auth_repository.dart';
 
+class LoginUseCase implements UsecaseWithParams<String, LoginParams> {
+  final IAuthRepository authrepository;
+
+  LoginUseCase({required this.authrepository});
+
+  @override
+  Future<Either<Failure, String>> call(LoginParams params) {
+    return authrepository.loginUser(params.username, params.password);
+  }
+}
 class LoginParams extends Equatable {
   final String username;
   final String password;
-
 
   const LoginParams({
     required this.username,
     required this.password,
   });
 
-  // Initial Constructor
+  // Default constructor to initialize with empty values
   const LoginParams.initial()
       : username = '',
         password = '';
 
   @override
   List<Object> get props => [username, password];
-}
-
-class LoginUseCase implements UsecaseWithParams<String, LoginParams> {
-  final IAuthRepository repository;
-
-  LoginUseCase(this.repository);
-
-  @override
-  Future<Either<Failure, String>> call(LoginParams params) {
-    // IF api then store token in shared preferences
-    return repository.loginUser(params.username, params.password);
-  }
 }

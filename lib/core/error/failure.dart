@@ -24,4 +24,5 @@ class ApiFailure extends Failure {
 // Add the InvalidInputFailure class
 class InvalidInputFailure extends Failure {
   const InvalidInputFailure({required super.message});
+
 }

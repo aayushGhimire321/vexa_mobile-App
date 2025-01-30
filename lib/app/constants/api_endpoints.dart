@@ -3,7 +3,7 @@ class ApiEndpoints {
 
   static const Duration connectionTimeout = Duration(seconds: 1000);
   static const Duration receiveTimeout = Duration(seconds: 1000);
-  static const String baseUrl = "https://vexa.onrender.com/api/";
+  static const String baseUrl = "http://10.0.2.2:3000/api/v1/";
 
   // ====================== Auth Routes ======================
   static const String signIn = "auth/signin";
