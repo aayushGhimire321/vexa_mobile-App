@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dartz/dartz.dart';
-import '../../../../dashboard/presentation/view_model/dashboard/dashboard_event.dart';
-import '../../../domain/entity/auth_entity.dart';
 import '../../../domain/use_case/login_usecase.dart';
 import '../../../../../core/common/snackbar/my_snackbar.dart';
 import 'login_event.dart';
@@ -15,6 +12,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       : _loginUseCase = loginUseCase,
         super(LoginState.initial()) {
     on<LoginRequested>(_onLoginRequested);
+    on<NavigateDashboardEvent>(_onNavigateToDashboard); // Add this handler for navigating
   }
 
   Future<void> _onLoginRequested(
@@ -22,7 +20,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     emit(state.copyWith(isLoading: true));
 
     final result = await _loginUseCase(
-      LoginParams(username: event.username, password: event.password,),
+      LoginParams(username: event.username, password: event.password),
     );
 
     result.fold(
@@ -34,12 +32,19 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           color: Colors.red,
         );
       },
-          (token) {  // token is a String
+          (token) {
         emit(state.copyWith(isLoading: false, isSuccess: true, token: token));
-        add(NavigateDashboardEvent(context: event.context));
+        add(NavigateDashboardEvent(context: event.context)); // Navigate after success
       },
     );
+  }
 
+  // This function will be called to handle navigation to the dashboard
+  Future<void> _onNavigateToDashboard(
+      NavigateDashboardEvent event, Emitter<LoginState> emit) async {
+    // You can use the context to navigate to the dashboard
+    if (event.context != null) {
+      Navigator.pushReplacementNamed(event.context, '/dashboard');
+    }
   }
 }
-
