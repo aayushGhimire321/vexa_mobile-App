@@ -25,7 +25,7 @@ class LoginScreen extends StatelessWidget {
             children: <Widget>[
               const SizedBox(height: 40),
               Image.asset(
-                'assets/login_image.png', // Placeholder
+                'assets/images/login.png', // Placeholder
                 height: 160,
               ),
               const SizedBox(height: 10),
@@ -78,30 +78,34 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 20),
               BlocConsumer<LoginBloc, LoginState>(
                 listener: (context, state) {
-                  if (state is LoginFailure) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Invalid credentials: ${state.message}'),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
-
-                  if (state is LoginSuccess) {
+                  if (state.isSuccess) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Logged in successfully'),
                         backgroundColor: Colors.green,
                       ),
                     );
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => DashboardScreen()),
+
+                    // Ensure navigation happens after the current frame
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => DashboardScreen()),
+                      );
+                    });
+                  }
+
+                  if (state.errorMessage.isNotEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Invalid credentials: ${state.errorMessage}'),
+                        backgroundColor: Colors.red,
+                      ),
                     );
                   }
                 },
                 builder: (context, state) {
-                  if (state is LoginLoading) {
+                  if (state.isLoading) {
                     return const CircularProgressIndicator();
                   }
 
@@ -111,9 +115,24 @@ class LoginScreen extends StatelessWidget {
                       String username = usernameController.text.trim();
                       String password = passwordController.text.trim();
 
+                      // Simple form validation
+                      if (username.isEmpty || password.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please fill in both fields'),
+                            backgroundColor: Colors.orange,
+                          ),
+                        );
+                        return;
+                      }
+
                       // Dispatch the LoginRequested event
                       BlocProvider.of<LoginBloc>(context).add(
-                        LoginRequested(username: username, password: password),
+                        LoginRequested(
+                          username: username,
+                          password: password,
+                          context: context,
+                        ),
                       );
                     },
                   );

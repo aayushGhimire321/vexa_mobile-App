@@ -1,45 +1,24 @@
-import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-sealed class RegisterEvent extends Equatable {
-  const RegisterEvent();
-
+abstract class RegisterEvent extends Equatable {
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
-// Event to load profile image
-class LoadImage extends RegisterEvent {
-  final File file;
-
-  const LoadImage({required this.file});
-
-  @override
-  List<Object> get props => [file];
-}
-
-// Event to register a user
-class RegisterUser extends RegisterEvent {
-  final BuildContext context;
-  final String email;
+class RegisterRequested extends RegisterEvent {
   final String username;
+  final String email;
   final String password;
-  final File? profileImage; // Optional profile image
+  final BuildContext context;
 
-  const RegisterUser({
-    required this.context,
-    required this.email,
+  RegisterRequested({
     required this.username,
+    required this.email,
     required this.password,
-    this.profileImage,
+    required this.context,
   });
 
   @override
-  List<Object> get props => [
-    email,
-    username,
-    password,
-    profileImage ?? File(''), // Ensure null safety
-  ];
+  List<Object?> get props => [username, email, password, context];
 }

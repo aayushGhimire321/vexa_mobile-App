@@ -1,51 +1,50 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dartz/dartz.dart';
-import '../../../domain/entity/auth_entity.dart';
 import '../../../domain/use_case/login_usecase.dart';
+import '../../../../../core/common/snackbar/my_snackbar.dart';
 import 'login_event.dart';
 import 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final LoginUseCase loginUseCase;
+  final LoginUseCase _loginUseCase;
 
-  LoginBloc({required this.loginUseCase}) : super(LoginInitial());
-
-  @override
-  Stream<LoginState> mapEventToState(LoginEvent event) async* {
-    if (event is LoginRequested) {
-      yield LoginLoading();
-
-      // Call the use case to authenticate the user
-      final result = await loginUseCase(
-        LoginParams(username: event.username, password: event.password),
-      );
-
-      yield* result.fold(
-            (failure) async* {
-          // Yield a failure state if login fails
-          yield LoginFailure(message: failure.message);
-        },
-            (userId) async* {
-          // Assuming userId is returned on successful login, and we fetch user details next.
-          final user = await _getUserDetails(userId);  // Example of how to fetch user details.
-
-          // Yield success with the user entity
-          yield LoginSuccess(user: user);
-        },
-      );
-    }
+  LoginBloc({required LoginUseCase loginUseCase})
+      : _loginUseCase = loginUseCase,
+        super(LoginState.initial()) {
+    on<LoginRequested>(_onLoginRequested);
+    on<NavigateDashboardEvent>(_onNavigateToDashboard); // Add this handler for navigating
   }
 
-  // Example function to fetch user details (you would implement this as per your app's logic)
-  Future<UserEntity> _getUserDetails(String userId) async {
-    // Simulate fetching user details with the userId
-    // You should replace this with actual logic to fetch user data from your repository
-    return UserEntity(
-      userId: userId,
-      username: "exampleUsername",
-      email: "example@example.com",
-      password: "examplePassword",
-      image: "exampleImage",  // Add the actual image path/URL if necessary
+  Future<void> _onLoginRequested(
+      LoginRequested event, Emitter<LoginState> emit) async {
+    emit(state.copyWith(isLoading: true));
+
+    final result = await _loginUseCase(
+      LoginParams(username: event.username, password: event.password),
     );
+
+    result.fold(
+          (failure) {
+        emit(state.copyWith(isLoading: false, isSuccess: false));
+        showMySnackBar(
+          context: event.context,
+          message: "Invalid Credentials",
+          color: Colors.red,
+        );
+      },
+          (token) {
+        emit(state.copyWith(isLoading: false, isSuccess: true, token: token));
+        add(NavigateDashboardEvent(context: event.context)); // Navigate after success
+      },
+    );
+  }
+
+  // This function will be called to handle navigation to the dashboard
+  Future<void> _onNavigateToDashboard(
+      NavigateDashboardEvent event, Emitter<LoginState> emit) async {
+    // You can use the context to navigate to the dashboard
+    if (event.context != null) {
+      Navigator.pushReplacementNamed(event.context, '/dashboard');
+    }
   }
 }
