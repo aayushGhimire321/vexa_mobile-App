@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
 abstract class RegisterEvent extends Equatable {
   @override
@@ -10,15 +9,13 @@ class RegisterRequested extends RegisterEvent {
   final String username;
   final String email;
   final String password;
-  final BuildContext context;
 
   RegisterRequested({
     required this.username,
     required this.email,
-    required this.password,
-    required this.context,
+    required this.password, required context,
   });
 
   @override
-  List<Object?> get props => [username, email, password, context];
+  List<Object?> get props => [username, email, password];
 }

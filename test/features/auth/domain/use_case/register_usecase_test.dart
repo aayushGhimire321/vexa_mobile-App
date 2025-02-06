@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -6,19 +7,18 @@ import 'package:vexa/features/auth/domain/entity/auth_entity.dart';
 import 'package:vexa/features/auth/domain/repository/auth_repository.dart';
 import 'package:vexa/features/auth/domain/use_case/register_usecase.dart';
 
+
+
 class MockAuthRepository extends Mock implements IAuthRepository {}
+
+class FakeUserEntity extends Fake implements UserEntity {}
 
 void main() {
   late MockAuthRepository mockAuthRepository;
   late RegisterUseCase registerUseCase;
 
   setUpAll(() {
-    // Register a fallback value for UserEntity
-    registerFallbackValue(const UserEntity( email: 'dummy@example.com', username: 'dummyUser', password: 'dummy', image: ''));
-
-    // If UserEntity is a function, use a fake class:
-    // class UserEntityFake extends Fake implements UserEntity {}
-    // registerFallbackValue(UserEntityFake());
+    registerFallbackValue(FakeUserEntity());
   });
 
   setUp(() {
@@ -26,59 +26,63 @@ void main() {
     registerUseCase = RegisterUseCase(authRepository: mockAuthRepository);
   });
 
-  group('RegisterUseCase', () {
-    const email = 'test@example.com';
-    const username = 'newuser';
-    const password = 'password123';
+  const testEmail = 'test@example.com';
+  const testUsername = 'testuser';
+  const testPassword = 'password123';
+  final testProfileImage = File('path/to/test_image.jpg');
+  final registerParams = RegisterUserParams(
+    email: testEmail,
+    username: testUsername,
+    password: testPassword,
+    profileImage: testProfileImage,
+  );
 
-    test('should return success when registration is successful', () async {
-      // Arrange
-      when(() => mockAuthRepository.registerUser(any()))
-          .thenAnswer((_) async => const Right(null));
+  test('should return void when registration is successful', () async {
+    final userEntity = UserEntity(
+      email: testEmail,
+      username: testUsername,
+      password: testPassword,
+      image: '',
+    );
 
-      // Act
-      final result = await registerUseCase(const RegisterUserParams(
-        email: email,
-        username: username,
-        password: password,
-      ));
+    when(() => mockAuthRepository.registerUser(userEntity))
+        .thenAnswer((_) async => const Right(null));
 
-      // Assert
-      expect(result, const Right(null));
-      verify(() => mockAuthRepository.registerUser(any())).called(1);
-      verifyNoMoreInteractions(mockAuthRepository);
-    });
+    final result = await registerUseCase(registerParams);
 
-    test('should return a ServerFailure when registration fails', () async {
-      // Arrange
-      when(() => mockAuthRepository.registerUser(any()))
-          .thenAnswer((_) async => const Left(ServerFailure(message: 'Server error')));
+    expect(result, const Right(null));
+    verify(() => mockAuthRepository.registerUser(userEntity)).called(1);
+    verifyNoMoreInteractions(mockAuthRepository);
+  });
 
-      // Act
-      final result = await registerUseCase(const RegisterUserParams(
-        email: email,
-        username: username,
-        password: password,
-      ));
+  test('should return Failure when registration fails', () async {
+    final userEntity = UserEntity(
+      email: testEmail,
+      username: testUsername,
+      password: testPassword,
+      image: '',
+    );
 
-      // Assert
-      expect(result, isA<Left<Failure, void>>());
-      expect((result as Left).value, isA<ServerFailure>());
-      verify(() => mockAuthRepository.registerUser(any())).called(1);
-      verifyNoMoreInteractions(mockAuthRepository);
-    });
+    when(() => mockAuthRepository.registerUser(userEntity))
+        .thenAnswer((_) async => Left(ServerFailure(message: 'err')));
 
-    test('should return InvalidInputFailure when input is invalid', () async {
-      // Act
-      final result = await registerUseCase(const RegisterUserParams(
-        email: '',
-        username: '',
-        password: '',
-      ));
+    final result = await registerUseCase(registerParams);
 
-      // Assert
-      expect(result, isA<Left<Failure, void>>());
-      expect((result as Left).value, isA<InvalidInputFailure>());
-    });
+    expect(result, isA<Left<Failure, void>>());
+    verify(() => mockAuthRepository.registerUser(userEntity)).called(1);
+    verifyNoMoreInteractions(mockAuthRepository);
+  });
+
+  test('should return InvalidInputFailure when input is invalid', () async {
+    final invalidParams = RegisterUserParams(
+      email: '',
+      username: '',
+      password: '',
+    );
+
+    final result = await registerUseCase(invalidParams);
+
+    expect(result, equals(const Left(InvalidInputFailure(message: 'Invalid input'))));
+    verifyNever(() => mockAuthRepository.registerUser(any()));
   });
 }

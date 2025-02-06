@@ -11,7 +11,7 @@ class LoginRequested extends LoginEvent {
   final String password;
   final BuildContext context;
 
-  LoginRequested({required this.username, required this.password, required this.context});
+  LoginRequested({required this.username, required this.password, required this.context, required String email});
 
   @override
   List<Object?> get props => [username, password, context];

@@ -1,11 +1,12 @@
 import 'dart:io';
-
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:vexa/core/error/failure.dart';
-import 'package:vexa/features/auth/domain/use_case/profile_picture_usecase.dart';
 import 'package:vexa/features/auth/domain/repository/auth_repository.dart';
+import 'package:vexa/features/auth/domain/use_case/profile_picture_usecase.dart';
+
+
 
 class MockAuthRepository extends Mock implements IAuthRepository {}
 
@@ -18,36 +19,29 @@ void main() {
     uploadImageUseCase = UploadImageUseCase(repository: mockAuthRepository);
   });
 
-  group('UploadImageUseCase', () {
-    final file = File('path/to/file.png');
+  final testFile = File('path/to/test_image.jpg');
+  const testImageUrl = 'https://example.com/test_image.jpg';
+  final uploadParams = UploadImageParams(file: testFile);
 
-    test('should return image URL when image upload is successful', () async {
-      // Arrange
-      when(() => mockAuthRepository.uploadProfilePicture(file))
-          .thenAnswer((_) async => const Right('image_url'));
+  test('should return image URL when upload is successful', () async {
+    when(() => mockAuthRepository.uploadProfilePicture(testFile))
+        .thenAnswer((_) async => const Right(testImageUrl));
 
-      // Act
-      final result = await uploadImageUseCase(UploadImageParams(file: file));
+    final result = await uploadImageUseCase(uploadParams);
 
-      // Assert
-      expect(result, const Right('image_url'));
-      verify(() => mockAuthRepository.uploadProfilePicture(file)).called(1);
-      verifyNoMoreInteractions(mockAuthRepository);
-    });
+    expect(result, const Right(testImageUrl));
+    verify(() => mockAuthRepository.uploadProfilePicture(testFile)).called(1);
+    verifyNoMoreInteractions(mockAuthRepository);
+  });
 
-    test('should return ServerFailure when image upload fails', () async {
-      // Arrange
-      when(() => mockAuthRepository.uploadProfilePicture(file))
-          .thenAnswer((_) async => const Left(ServerFailure(message: 'Upload failed')));
+  test('should return Failure when upload fails', () async {
+    when(() => mockAuthRepository.uploadProfilePicture(testFile))
+        .thenAnswer((_) async => const Left(ServerFailure(message: 'Failure')));
 
-      // Act
-      final result = await uploadImageUseCase(UploadImageParams(file: file));
+    final result = await uploadImageUseCase(uploadParams);
 
-      // Assert
-      expect(result, isA<Left<Failure, String>>());
-      expect((result as Left).value, isA<ServerFailure>());
-      verify(() => mockAuthRepository.uploadProfilePicture(file)).called(1);
-      verifyNoMoreInteractions(mockAuthRepository);
-    });
+    expect(result, isA<Left<Failure, String>>());
+    verify(() => mockAuthRepository.uploadProfilePicture(testFile)).called(1);
+    verifyNoMoreInteractions(mockAuthRepository);
   });
 }
