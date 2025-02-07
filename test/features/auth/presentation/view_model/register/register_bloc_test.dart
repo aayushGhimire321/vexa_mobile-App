@@ -8,7 +8,7 @@ import 'package:vexa/features/auth/presentation/view_model/register/register_blo
 import 'package:vexa/features/auth/presentation/view_model/register/register_event.dart';
 import 'package:vexa/features/auth/presentation/view_model/register/register_state.dart';
 import 'package:vexa/core/error/failure.dart';
-import 'package:flutter/material.dart'; // For BuildContext
+import 'package:flutter/material.dart'; // Import for BuildContext
 
 // Mock classes
 class MockRegisterUseCase extends Mock implements RegisterUseCase {}
@@ -17,26 +17,17 @@ class MockContext extends Mock implements BuildContext {}
 
 void main() {
   late MockRegisterUseCase mockRegisterUseCase;
-  late MockUploadImageUseCase mockUploadImageUseCase;
+  late MockUploadImageUseCase mockUploadImageUseCase; // Declare the mock for UploadImageUseCase
   late RegisterBloc registerBloc;
   late MockContext mockContext;
 
-  // Register a fallback value for RegisterUserParams
-  setUpAll(() {
-    registerFallbackValue(RegisterUserParams(
-      username: 'dummy_user',
-      email: 'dummy@example.com',
-      password: 'dummyPassword123',
-    ));
-  });
-
   setUp(() {
     mockRegisterUseCase = MockRegisterUseCase();
-    mockUploadImageUseCase = MockUploadImageUseCase();
-    mockContext = MockContext();
+    mockUploadImageUseCase = MockUploadImageUseCase(); // Initialize the mock for UploadImageUseCase
+    mockContext = MockContext(); // Create a mock context
     registerBloc = RegisterBloc(
       registerUseCase: mockRegisterUseCase,
-      uploadImageUseCase: mockUploadImageUseCase,
+      uploadImageUseCase: mockUploadImageUseCase, // Pass the mock to the RegisterBloc constructor
     );
   });
 
@@ -48,20 +39,20 @@ void main() {
     'emits [RegisterLoading, RegisterSuccess] when registration is successful',
     build: () {
       when(() => mockRegisterUseCase(any()))
-          .thenAnswer((_) async => const Right('Registration Successful'));
+          .thenAnswer((_) async => const Right('Success'));
       return registerBloc;
     },
     act: (bloc) => bloc.add(
       RegisterRequested(
         username: 'test_user',
-        email: 'test@example.com',
+        email: 'test@example.com',  // Added email parameter
         password: 'password123',
         context: mockContext,
       ),
     ),
     expect: () => [
-      RegisterState.initial().copyWith(isLoading: true),
-      RegisterState.initial().copyWith(isLoading: false, isSuccess: true),
+      RegisterState.initial().copyWith(isLoading: true), // RegisterLoading state
+      RegisterState.initial().copyWith(isLoading: false, isSuccess: true), // RegisterSuccess state
     ],
     verify: (_) {
       verify(() => mockRegisterUseCase(any())).called(1);
@@ -78,18 +69,18 @@ void main() {
     act: (bloc) => bloc.add(
       RegisterRequested(
         username: 'test_user',
-        email: 'test@example.com',
+        email: 'test@example.com',  // Added email parameter
         password: 'password123',
         context: mockContext,
       ),
     ),
     expect: () => [
-      RegisterState.initial().copyWith(isLoading: true),
+      RegisterState.initial().copyWith(isLoading: true), // RegisterLoading state
       RegisterState.initial().copyWith(
         isLoading: false,
         isSuccess: false,
         errorMessage: 'Registration Failed: ServerFailure',
-      ),
+      ), // RegisterFailure state
     ],
     verify: (_) {
       verify(() => mockRegisterUseCase(any())).called(1);

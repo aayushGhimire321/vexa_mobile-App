@@ -131,7 +131,7 @@ class LoginScreen extends StatelessWidget {
                         LoginRequested(
                           username: username,
                           password: password,
-                          context: context,
+                          context: context, email: AutofillHints.email,
                         ),
                       );
                     },
