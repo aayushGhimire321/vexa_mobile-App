@@ -1,17 +1,18 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:vexa/features/auth/domain/use_case/profile_picture_usecase.dart';
 import 'package:vexa/features/auth/presentation/view_model/register/register_event.dart';
 import 'package:vexa/features/auth/presentation/view_model/register/register_state.dart';
 
-import '../../../../../core/common/snackbar/my_snackbar.dart';
+import '../../../domain/use_case/profile_picture_usecase.dart';
 import '../../../domain/use_case/register_usecase.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final RegisterUseCase _registerUseCase;
+  final UploadImageUseCase uploadImageUseCase; // Ensure this is properly initialized.
 
-  RegisterBloc({required RegisterUseCase registerUseCase, required UploadImageUseCase uploadImageUsecase})
-      : _registerUseCase = registerUseCase,
+  RegisterBloc({
+    required RegisterUseCase registerUseCase,
+    required this.uploadImageUseCase,  // This should not be null
+  })  : _registerUseCase = registerUseCase,
         super(RegisterState.initial()) {
     on<RegisterRequested>(_onRegisterRequested);
   }
@@ -30,19 +31,10 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
     result.fold(
           (failure) {
-        emit(state.copyWith(isLoading: false, isSuccess: false));
-        showMySnackBar(
-          context: event.context,
-          message: "Registration Failed: ${failure.toString()}",
-          color: Colors.red,
-        );
+        emit(state.copyWith(isLoading: false, isSuccess: false, errorMessage: "Registration Failed: ${failure.toString()}"));
       },
           (successMessage) {
-        emit(state.copyWith(isLoading: false, isSuccess: true));
-        showMySnackBar(
-          context: event.context,
-          color: Colors.green, message: '',
-        );
+        emit(state.copyWith(isLoading: false, isSuccess: true, errorMessage: ''));
       },
     );
   }

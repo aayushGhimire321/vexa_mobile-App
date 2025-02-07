@@ -53,7 +53,7 @@ _initAuthDependencies() async {
 
   // Register the blocs that depend on use cases
   getIt.registerFactory<LoginBloc>(() => LoginBloc(loginUseCase: getIt<LoginUseCase>()));
-  getIt.registerFactory<RegisterBloc>(() => RegisterBloc(registerUseCase: getIt<RegisterUseCase>(), uploadImageUsecase: getIt<UploadImageUseCase>()));
+  getIt.registerFactory<RegisterBloc>(() => RegisterBloc(registerUseCase: getIt<RegisterUseCase>(), uploadImageUseCase: getIt<UploadImageUseCase>()));
   getIt.registerFactory<ForgotPasswordBloc>(() => ForgotPasswordBloc());
 }
 

@@ -2,8 +2,9 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:vexa/core/error/failure.dart';
-import 'package:vexa/features/auth/domain/use_case/login_usecase.dart';
 import 'package:vexa/features/auth/domain/repository/auth_repository.dart';
+import 'package:vexa/features/auth/domain/use_case/login_usecase.dart';
+
 
 class MockAuthRepository extends Mock implements IAuthRepository {}
 
@@ -16,38 +17,30 @@ void main() {
     loginUseCase = LoginUseCase(authrepository: mockAuthRepository);
   });
 
-  group('LoginUseCase', () {
-    const username = 'testuser';
-    const password = 'password123';
-    const token = 'valid_token';
+  const testUsername = 'testuser';
+  const testPassword = 'testpass';
+  const testToken = 'dummy_token';
+  const loginParams = LoginParams(username: testUsername, password: testPassword);
 
-    test('should return a token when login is successful', () async {
-      // Arrange
-      when(() => mockAuthRepository.loginUser(username, password))
-          .thenAnswer((_) async => const Right(token));
+  test('should return token when login is successful', () async {
+    when(() => mockAuthRepository.loginUser(testUsername, testPassword))
+        .thenAnswer((_) async => const Right(testToken));
 
-      // Act
-      final result = await loginUseCase(const LoginParams(username: username, password: password));
+    final result = await loginUseCase(loginParams);
 
-      // Assert
-      expect(result, const Right(token));
-      verify(() => mockAuthRepository.loginUser(username, password)).called(1);
-      verifyNoMoreInteractions(mockAuthRepository);
-    });
+    expect(result, const Right(testToken));
+    verify(() => mockAuthRepository.loginUser(testUsername, testPassword)).called(1);
+    verifyNoMoreInteractions(mockAuthRepository);
+  });
 
-    test('should return a ServerFailure when login fails', () async {
-      // Arrange
-      when(() => mockAuthRepository.loginUser(username, password))
-          .thenAnswer((_) async => const Left(ServerFailure(message: 'Server error')));
+  test('should return Failure when login fails', () async {
+    when(() => mockAuthRepository.loginUser(testUsername, testPassword))
+        .thenAnswer((_) async => const Left(ServerFailure(message: 'Failure')));
 
-      // Act
-      final result = await loginUseCase(const LoginParams(username: username, password: password));
+    final result = await loginUseCase(loginParams);
 
-      // Assert
-      expect(result, isA<Left<Failure, String>>());
-      expect((result as Left).value, isA<ServerFailure>());
-      verify(() => mockAuthRepository.loginUser(username, password)).called(1);
-      verifyNoMoreInteractions(mockAuthRepository);
-    });
+    expect(result, isA<Left<Failure, String>>());
+    verify(() => mockAuthRepository.loginUser(testUsername, testPassword)).called(1);
+    verifyNoMoreInteractions(mockAuthRepository);
   });
 }
