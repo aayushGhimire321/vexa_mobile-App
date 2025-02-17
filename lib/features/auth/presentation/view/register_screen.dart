@@ -17,8 +17,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController otpController = TextEditingController();
 
   File? _profileImage;
+  bool isOtpSent = false;
 
   // Check camera permission
   checkCameraPermission() async {
@@ -124,12 +126,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: confirmPasswordController,
               ),
               const SizedBox(height: 20),
+              if (isOtpSent)
+                CustomTextField(
+                  hintText: 'Enter OTP',
+                  controller: otpController,
+                ),
+              const SizedBox(height: 20),
               CustomButton(
-                text: 'Register',
+                text: isOtpSent ? 'Verify OTP' : 'Register',
                 onPressed: () {
                   String username = usernameController.text.trim();
                   String password = passwordController.text.trim();
                   String confirmPassword = confirmPasswordController.text.trim();
+                  String otp = otpController.text.trim(); // Get OTP
 
                   if (password != confirmPassword) {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -157,17 +166,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return;
                   }
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        'Registered successfully!',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
+                  if (isOtpSent) {
+                    if (otp.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Please enter OTP',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                      return;
+                    }
 
-                  Navigator.pop(context); // Navigate to the login screen
+                    // Trigger OTP validation here
+                    // Call the RegisterBloc to verify OTP
+                    // Proceed with registration or show error if OTP is incorrect
+                    return;
+                  } else {
+                    // Send OTP to the email
+                    // Trigger Bloc event to send OTP
+                    setState(() {
+                      isOtpSent = true;
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'OTP sent to your email',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  }
                 },
               ),
               const SizedBox(height: 10),

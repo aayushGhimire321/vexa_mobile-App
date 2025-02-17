@@ -42,18 +42,17 @@ _initApiService() {
 }
 
 _initAuthDependencies() async {
-  // Register IAuthRepository with its implementation (AuthRepository)
+  // Register IAuthRepository with its implementation (AuthRepositoryImpl)
   getIt.registerLazySingleton<IAuthRepository>(() => AuthRepository(apiService: getIt<ApiService>()));
 
   // Register use cases with the correct IAuthRepository
-  getIt.registerLazySingleton<LoginUseCase>(() => LoginUseCase(authrepository: getIt<IAuthRepository>()));
+  getIt.registerLazySingleton<LoginUseCase>(() => LoginUseCase(authRepository: getIt<IAuthRepository>()));
   getIt.registerLazySingleton<RegisterUseCase>(() => RegisterUseCase(authRepository: getIt<IAuthRepository>()));
-  getIt.registerLazySingleton<UploadImageUseCase>(() => UploadImageUseCase(repository: getIt<IAuthRepository>()));
-
+  getIt.registerLazySingleton<ProfilePictureUseCase>(() => ProfilePictureUseCase(authRepository: getIt<IAuthRepository>()));
 
   // Register the blocs that depend on use cases
   getIt.registerFactory<LoginBloc>(() => LoginBloc(loginUseCase: getIt<LoginUseCase>()));
-  getIt.registerFactory<RegisterBloc>(() => RegisterBloc(registerUseCase: getIt<RegisterUseCase>(), uploadImageUseCase: getIt<UploadImageUseCase>()));
+  getIt.registerFactory<RegisterBloc>(() => RegisterBloc(registerUseCase: getIt<RegisterUseCase>(), profilePictureUseCase: getIt<ProfilePictureUseCase>()));
   getIt.registerFactory<ForgotPasswordBloc>(() => ForgotPasswordBloc());
 }
 
