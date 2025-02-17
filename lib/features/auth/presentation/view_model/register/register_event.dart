@@ -1,34 +1,21 @@
-// register_event.dart
 import 'package:equatable/equatable.dart';
 
 abstract class RegisterEvent extends Equatable {
-  const RegisterEvent();
-
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class RegisterRequested extends RegisterEvent {
   final String username;
+  final String email;
   final String password;
-  final String confirmPassword;
-  final String email; // Add email for OTP
 
-  const RegisterRequested({
+  RegisterRequested({
     required this.username,
-    required this.password,
-    required this.confirmPassword,
     required this.email,
+    required this.password, required context,
   });
 
   @override
-  List<Object> get props => [username, password, confirmPassword, email];
-}
-
-class OtpVerified extends RegisterEvent {
-  final String otp;
-  const OtpVerified(this.otp);
-
-  @override
-  List<Object> get props => [otp];
+  List<Object?> get props => [username, email, password];
 }

@@ -1,26 +1,25 @@
+import 'dart:io';
 import 'package:dartz/dartz.dart';
-import 'package:vexa/features/auth/domain/repository/auth_repository.dart';
-
+import '../../../../app/usecase/usecase.dart';
 import '../../../../core/error/failure.dart';
-import '../../data/repository/auth_repository.dart';
+import '../repository/auth_repository.dart';
 
-class ProfilePictureUseCase {
-  final AuthRepository authRepository;
+class UploadImageParams {
+  final File file;
 
-  ProfilePictureUseCase({required this.authRepository});
+  const UploadImageParams({
+    required this.file,
+  });
+}
 
-  Future<Either<Failure, String>> uploadProfilePicture({
-    required String userId,
-    required String filePath,
-  }) async {
-    try {
-      final result = await authRepository.uploadProfilePicture(
-        userId: userId,
-        filePath: filePath,
-      );
-      return Right(result); // Return success message
-    } catch (e) {
-      return Left(ServerFailure(message: 'Error')); // Handle failure if any error occurs
-    }
+class UploadImageUseCase implements UsecaseWithParams<String, UploadImageParams> {
+  final IAuthRepository _repository;
+
+  // Constructor should accept IAuthRepository as a required named parameter
+  UploadImageUseCase({required IAuthRepository repository}) : _repository = repository;
+
+  @override
+  Future<Either<Failure, String>> call(UploadImageParams params) async {
+    return _repository.uploadProfilePicture(params.file);
   }
 }
