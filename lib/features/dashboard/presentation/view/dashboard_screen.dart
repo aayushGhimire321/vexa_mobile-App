@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../app/constants/strings.dart';
+import '../../../../app/constants/strings.dart';
 import '../../../../app/widget/action_button.dart';
 import '../../../../app/widget/sidebar.dart';
 import '../../../../app/widget/stat_card.dart';

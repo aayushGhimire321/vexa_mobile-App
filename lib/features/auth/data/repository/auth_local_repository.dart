@@ -1,5 +1,5 @@
 import 'dart:io';
-import '../../../../../core/network/hive_service.dart';
+import '../../../../core/network/hive_service.dart';
 
 import '../../domain/entity/auth_entity.dart';
 import '../data_source/local_data_source.dart';

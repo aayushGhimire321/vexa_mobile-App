@@ -1,45 +1,44 @@
-import 'package:equatable/equatable.dart';
-
-class LoginState extends Equatable {
+class LoginState {
   final bool isLoading;
   final bool isSuccess;
-  final String? token; // Store the token instead of UserEntity
   final String errorMessage;
 
-
-  const LoginState( {
+  LoginState({
     required this.isLoading,
     required this.isSuccess,
-    this.token,
     required this.errorMessage,
   });
 
   factory LoginState.initial() {
-    return const LoginState(
-      isLoading: false,
-      isSuccess: false,
-      token: null,
-      errorMessage: '',
-
-    );
+    return LoginState(isLoading: false, isSuccess: false, errorMessage: "");
   }
 
   LoginState copyWith({
     bool? isLoading,
     bool? isSuccess,
-    String? token,
     String? errorMessage,
-
   }) {
     return LoginState(
       isLoading: isLoading ?? this.isLoading,
       isSuccess: isSuccess ?? this.isSuccess,
-      token: token ?? this.token,
       errorMessage: errorMessage ?? this.errorMessage,
-
     );
   }
 
   @override
-  List<Object?> get props => [isLoading, isSuccess, token, errorMessage];
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is LoginState &&
+        other.isLoading == isLoading &&
+        other.isSuccess == isSuccess &&
+        other.errorMessage == errorMessage;
+  }
+
+  @override
+  int get hashCode => isLoading.hashCode ^ isSuccess.hashCode ^ errorMessage.hashCode;
+
+  @override
+  String toString() {
+    return 'LoginState(isLoading: $isLoading, isSuccess: $isSuccess, errorMessage: $errorMessage)';
+  }
 }
