@@ -1,19 +1,41 @@
-import 'package:vexa/features/auth/data/repository/auth_repository.dart';
+import 'dart:io';
+
+import 'package:dartz/dartz.dart';
+
+import '../../../../core/error/failure.dart';
+import '../entity/auth_entity.dart';
+import '../repository/auth_repository.dart';
 
 class RegisterUseCase {
-  final AuthRepository authRepository;
+  final IAuthRepository authRepository;
 
   RegisterUseCase({required this.authRepository});
 
-  Future<Map<String, dynamic>> call({
-    required String username,
-    required String email,
-    required String password,
-  }) async {
-    return await authRepository.signUp(
-      username: username,
-      email: email,
-      password: password,
+  Future<Either<Failure, void>> call(RegisterUserParams params) async {
+    if (params.email.isEmpty || params.username.isEmpty || params.password.isEmpty) {
+      return const Left(InvalidInputFailure(message: 'Invalid input'));
+    }
+
+    final authEntity = UserEntity(
+      email: params.email,
+      username: params.username,
+      password: params.password,
+      image: '',
     );
+
+    return await authRepository.registerUser(authEntity);
   }
+}
+class RegisterUserParams {
+  final String email;
+  final String username;
+  final String password;
+  final File? profileImage;
+
+  const RegisterUserParams({
+    required this.email,
+    required this.username,
+    required this.password,
+    this.profileImage, // profileImage can be null
+  });
 }

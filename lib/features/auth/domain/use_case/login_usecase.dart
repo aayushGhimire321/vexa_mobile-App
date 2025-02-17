@@ -1,14 +1,34 @@
-import 'package:vexa/features/auth/data/repository/auth_repository.dart';
+import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
 
-class LoginUseCase {
-  final AuthRepository authRepository;
+import '../../../../app/usecase/usecase.dart';
+import '../../../../core/error/failure.dart';
+import '../repository/auth_repository.dart';
 
-  LoginUseCase({required this.authRepository});
+class LoginUseCase implements UsecaseWithParams<String, LoginParams> {
+  final IAuthRepository authrepository;
 
-  Future<Map<String, dynamic>> call({
-    required String email,
-    required String password,
-  }) async {
-    return await authRepository.signIn(email: email, password: password);
+  LoginUseCase({required this.authrepository});
+
+  @override
+  Future<Either<Failure, String>> call(LoginParams params) {
+    return authrepository.loginUser(params.username, params.password);
   }
+}
+class LoginParams extends Equatable {
+  final String username;
+  final String password;
+
+  const LoginParams({
+    required this.username,
+    required this.password,
+  });
+
+  // Default constructor to initialize with empty values
+  const LoginParams.initial()
+      : username = '',
+        password = '';
+
+  @override
+  List<Object> get props => [username, password];
 }

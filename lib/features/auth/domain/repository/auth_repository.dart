@@ -1,30 +1,17 @@
-abstract class IAuthRepository {
-  Future<Map<String, dynamic>> signUp({
-    required String username,
-    required String email,
-    required String password,
-  });
+import 'dart:io';
 
-  Future<Map<String, dynamic>> signIn({
-    required String email,
-    required String password,
-  });
+import 'package:dartz/dartz.dart';
+import 'package:vexa/features/auth/domain/entity/auth_entity.dart';
 
-  Future<Map<String, dynamic>> googleSignIn(String token);
+import '../../../../core/error/failure.dart';
 
-  Future<Map<String, dynamic>> findUserByEmail(String email);
+abstract interface class IAuthRepository {
+  Future<Either<Failure, void>> registerUser(UserEntity student);
 
-  Future<Map<String, dynamic>> generateOtp(String email);
+  Future<Either<Failure, String>> loginUser(
+      String username, String password);
 
-  Future<Map<String, dynamic>> verifyOtp({
-    required String email,
-    required String otp,
-  });
+  Future<Either<Failure, String>> uploadProfilePicture(File file);
 
-  Future<Map<String, dynamic>> resetPassword({
-    required String email,
-    required String newPassword,
-  });
-  // Add this method for uploading the profile picture
-  Future<String> uploadProfilePicture({required String userId, required String filePath});
+  Future<Either<Failure, UserEntity>> getCurrentUser();
 }

@@ -1,42 +1,41 @@
-// register_state.dart
 import 'package:equatable/equatable.dart';
 
 class RegisterState extends Equatable {
   final bool isLoading;
   final bool isSuccess;
   final String errorMessage;
-  final bool otpSent;
+  final String successMessage;
 
   const RegisterState({
-    this.isLoading = false,
-    this.isSuccess = false,
-    this.errorMessage = '',
-    this.otpSent = false,
+    required this.isLoading,
+    required this.isSuccess,
+    required this.errorMessage,
+    required this.successMessage,
   });
-
-  @override
-  List<Object?> get props => [isLoading, isSuccess, errorMessage, otpSent];
-
-  RegisterState copyWith({
-    bool? isLoading,
-    bool? isSuccess,
-    String? errorMessage,
-    bool? otpSent,
-  }) {
-    return RegisterState(
-      isLoading: isLoading ?? this.isLoading,
-      isSuccess: isSuccess ?? this.isSuccess,
-      errorMessage: errorMessage ?? this.errorMessage,
-      otpSent: otpSent ?? this.otpSent,
-    );
-  }
 
   factory RegisterState.initial() {
     return const RegisterState(
       isLoading: false,
       isSuccess: false,
       errorMessage: '',
-      otpSent: false,
+      successMessage: '',
     );
   }
+
+  RegisterState copyWith({
+    bool? isLoading,
+    bool? isSuccess,
+    String? errorMessage,
+    String? successMessage,
+  }) {
+    return RegisterState(
+      isLoading: isLoading ?? this.isLoading,
+      isSuccess: isSuccess ?? this.isSuccess,
+      errorMessage: errorMessage ?? this.errorMessage,
+      successMessage: successMessage ?? this.successMessage,
+    );
+  }
+
+  @override
+  List<Object?> get props => [isLoading, isSuccess, errorMessage, successMessage];
 }
