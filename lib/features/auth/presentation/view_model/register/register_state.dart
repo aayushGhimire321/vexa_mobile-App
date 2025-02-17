@@ -1,41 +1,28 @@
 import 'package:equatable/equatable.dart';
 
-class RegisterState extends Equatable {
-  final bool isLoading;
-  final bool isSuccess;
-  final String errorMessage;
-  final String successMessage;
+abstract class RegisterState extends Equatable {
+  @override
+  List<Object?> get props => [];
+}
 
-  const RegisterState({
-    required this.isLoading,
-    required this.isSuccess,
-    required this.errorMessage,
-    required this.successMessage,
-  });
+class RegisterInitial extends RegisterState {}
 
-  factory RegisterState.initial() {
-    return const RegisterState(
-      isLoading: false,
-      isSuccess: false,
-      errorMessage: '',
-      successMessage: '',
-    );
-  }
+class RegisterLoading extends RegisterState {}
 
-  RegisterState copyWith({
-    bool? isLoading,
-    bool? isSuccess,
-    String? errorMessage,
-    String? successMessage,
-  }) {
-    return RegisterState(
-      isLoading: isLoading ?? this.isLoading,
-      isSuccess: isSuccess ?? this.isSuccess,
-      errorMessage: errorMessage ?? this.errorMessage,
-      successMessage: successMessage ?? this.successMessage,
-    );
-  }
+class RegisterSuccess extends RegisterState {
+  final String message;
+
+  RegisterSuccess({required this.message});
 
   @override
-  List<Object?> get props => [isLoading, isSuccess, errorMessage, successMessage];
+  List<Object?> get props => [message];
+}
+
+class RegisterFailure extends RegisterState {
+  final String error;
+
+  RegisterFailure({required this.error});
+
+  @override
+  List<Object?> get props => [error];
 }

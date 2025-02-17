@@ -3,7 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:vexa/features/auth/domain/entity/auth_entity.dart';
 import '../../../../core/error/failure.dart';
-import '../../../../../core/network/api_service.dart';
+import '../../../../core/network/api_service.dart';
 import '../../domain/repository/auth_repository.dart';
 
 class AuthRepository implements IAuthRepository {
