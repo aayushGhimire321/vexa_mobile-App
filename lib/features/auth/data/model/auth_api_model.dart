@@ -2,12 +2,12 @@ import 'package:vexa/features/auth/domain/entity/auth_entity.dart';
 
 
 class AuthApiModel {
-  final String username;
+  final String name;
   final String email;
   final String password;
 
   AuthApiModel({
-    required this.username,
+    required this.name,
     required this.email,
     required this.password,
   });
@@ -15,7 +15,7 @@ class AuthApiModel {
   /// Convert `AuthApiModel` to a JSON object.
   Map<String, dynamic> toJson() {
     return {
-      'username': username,
+      'name': name,
       'email': email,
       'password': password,
     };
@@ -24,7 +24,7 @@ class AuthApiModel {
   /// Create an `AuthApiModel` from a JSON object.
   factory AuthApiModel.fromJson(Map<String, dynamic> json) {
     return AuthApiModel(
-      username: json['username'],
+      name: json['name'],
       email: json['email'],
       password: json['password'],
     );
@@ -33,7 +33,7 @@ class AuthApiModel {
   /// Convert `AuthApiModel` to `AuthEntity` (Domain Layer).
   UserEntity toEntity() {
     return UserEntity(
-      username: username,
+      name: name,
       email: email,
       password: password, image: '',
     );
@@ -42,7 +42,7 @@ class AuthApiModel {
   /// Create `AuthApiModel` from `AuthEntity` (Domain Layer).
   factory AuthApiModel.fromEntity(UserEntity entity) {
     return AuthApiModel(
-      username: entity.username,
+      name: entity.name,
       email: entity.email,
       password: entity.password,
     );

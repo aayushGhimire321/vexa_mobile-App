@@ -18,7 +18,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       final response = await _dio.post(
         'auth/signin',
         data: {
-          'email': event.username, // Assuming email is used for login
+          'email': event.name, // Assuming email is used for login
           'password': event.password,
         },
       );

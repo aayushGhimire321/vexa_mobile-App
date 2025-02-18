@@ -1,47 +1,63 @@
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' show FormData, MultipartFile;
+import 'package:dio/src/dio.dart';
 import 'package:vexa/features/auth/domain/use_case/profile_picture_usecase.dart';
 import 'package:vexa/features/auth/domain/use_case/register_usecase.dart';
-import 'register_event.dart';
-import 'register_state.dart';
-import 'dart:io';
+import 'package:vexa/features/auth/presentation/view_model/register/register_event.dart';
+import 'package:vexa/features/auth/presentation/view_model/register/register_state.dart';
+
+import '../../../../../app/constants/api_endpoints.dart';
+import '../../../../../core/network/api_service.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
-  final Dio _dio = Dio(BaseOptions(baseUrl: 'http://10.0.2.2:3000/api/v1/'));
+  final ApiService _apiService;
 
-  RegisterBloc({required Dio dio, required RegisterUseCase registerUseCase, required UploadImageUseCase uploadImageUseCase}) : super(RegisterInitial());
+  RegisterBloc(this._apiService, {required RegisterUseCase registerUseCase, required UploadImageUseCase uploadImageUseCase, required Dio dio}) : super(RegisterInitial());
 
   @override
   Stream<RegisterState> mapEventToState(RegisterEvent event) async* {
-    if (event is RegisterUser) {
-      yield* _registerUser(event);
-    } else if (event is ImageSelectedEvent) {
-      // Handle profile image selection if needed
-    }
-  }
+    if (event is RegisterUserEvent) {
+      yield RegisterLoading(); // Show loading state
 
-  Stream<RegisterState> _registerUser(RegisterUser event) async* {
-    yield RegisterLoading();
+      // Check if password and confirm password match
+      if (event.password != event.confirmPassword) {
+        yield RegisterFailure('Passwords do not match');
+        return;
+      }
 
-    try {
-      final response = await _dio.post(
-        'auth/register',
-        data: {
-          'username': event.username,
+      // Check if any field is empty
+      if (event.username.isEmpty ||
+          event.email.isEmpty ||
+          event.password.isEmpty ||
+          event.confirmPassword.isEmpty) {
+        yield RegisterFailure('Please fill in all fields');
+        return;
+      }
+
+      // Prepare FormData for API call
+      try {
+        FormData formData = FormData.fromMap({
+          'name': event.username,
           'email': event.email,
           'password': event.password,
-          'confirmPassword': event.confirmPassword,
-          'profileImage': event.profileImagePath, // Handle file upload if needed
-        },
-      );
+          if (event.profileImage != null)
+            'profileImage': await MultipartFile.fromFile(
+              event.profileImage!.path,
+              filename: 'profile_image.jpg',
+            ),
+        });
 
-      if (response.statusCode == 200) {
-        yield RegisterSuccess(message: 'Registration successful');
-      } else {
-        yield RegisterFailure(error: "Invalid response from server");
+        // Send API request
+        var response = await _apiService.dio.post(ApiEndpoints.signUp, data: formData);
+
+        if (response.statusCode == 201 || response.statusCode == 200) {
+          yield RegisterSuccess('Registered successfully!');
+        } else {
+          yield RegisterFailure('Registration failed: ${response.data["message"] ?? 'Unknown error'}');
+        }
+      } catch (e) {
+        yield RegisterFailure('Error: $e');
       }
-    } on DioException catch (e) {
-      yield RegisterFailure(error: e.response?.data['message'] ?? "Registration failed");
     }
   }
 }

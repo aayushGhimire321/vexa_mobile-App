@@ -12,13 +12,13 @@ class RegisterUseCase {
   RegisterUseCase({required this.authRepository});
 
   Future<Either<Failure, void>> call(RegisterUserParams params) async {
-    if (params.email.isEmpty || params.username.isEmpty || params.password.isEmpty) {
+    if (params.email.isEmpty || params.name.isEmpty || params.password.isEmpty) {
       return const Left(InvalidInputFailure(message: 'Invalid input'));
     }
 
     final authEntity = UserEntity(
       email: params.email,
-      username: params.username,
+      name: params.name,
       password: params.password,
       image: '',
     );
@@ -28,13 +28,13 @@ class RegisterUseCase {
 }
 class RegisterUserParams {
   final String email;
-  final String username;
+  final String name;
   final String password;
   final File? profileImage;
 
   const RegisterUserParams({
     required this.email,
-    required this.username,
+    required this.name,
     required this.password,
     this.profileImage, // profileImage can be null
   });
