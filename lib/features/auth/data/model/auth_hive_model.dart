@@ -38,9 +38,8 @@ class AuthHiveModel extends Equatable {
   UserEntity toEntity() {
     return UserEntity(
       userId: userId,
-      name: name,
       email: email,
-      password: password, image: "",
+      password: password, image: "", name: '',
     );
   }
 
