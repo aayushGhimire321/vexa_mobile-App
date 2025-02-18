@@ -7,13 +7,13 @@ abstract class LoginEvent extends Equatable {
 }
 
 class LoginRequested extends LoginEvent {
-  final String username;  // Assuming username is the same as email
+  final String name;  // Assuming username is the same as email
   final String password;
 
-  LoginRequested({required this.username, required this.password, required BuildContext context, required String email});
+  LoginRequested({required this.name, required this.password, required BuildContext context, required String email});
 
   @override
-  List<Object?> get props => [username, password];
+  List<Object?> get props => [name, password];
 }
 
 class NavigateDashboardEvent extends LoginEvent {

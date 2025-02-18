@@ -35,9 +35,9 @@ abstract class AuthRemoteRepository implements IAuthLocalDataSource {
   }
 
   @override
-  Future<void> registerUser(UserEntity entity) async {
+  Future<void> registerUser(UserEntity entity, File profileImage) async {
     try {
-      await _authRemoteDatasource.registerUser(entity);
+      await _authRemoteDatasource.registerUser(entity, profileImage);
     } catch (e) {
       throw ServerException('Registration failed: ${e.toString()}', statusCode: 400);
     }

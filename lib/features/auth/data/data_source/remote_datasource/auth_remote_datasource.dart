@@ -1,60 +1,76 @@
-import 'dart:convert';
 import 'dart:io';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import '../../../../../app/constants/server_exception.dart';
 import '../../../domain/entity/auth_entity.dart';
 import '../../model/auth_api_model.dart';
 import '../local_data_source.dart';
 
-abstract class AuthRemoteDataSource implements IAuthLocalDataSource {
+class AuthRemoteDataSource implements IAuthLocalDataSource {
   final String baseUrl;
-  final http.Client client;
+  final Dio dio;
 
-  AuthRemoteDataSource({required this.baseUrl, required this.client});
+  AuthRemoteDataSource({required this.baseUrl, required this.dio});
 
   @override
-  Future<void> registerUser(UserEntity userEntity) async {
-    final url = Uri.parse('$baseUrl/register');
+  Future<void> registerUser(UserEntity userEntity, File profileImage) async {
+    final url = Uri.parse('$baseUrl/auth/signup');
+
+    // Prepare form data
+    FormData formData = FormData.fromMap({
+      'name': userEntity.name,
+      'email': userEntity.email,
+      'password': userEntity.password,
+      'profileImage': profileImage.path.isNotEmpty
+          ? await MultipartFile.fromFile(profileImage.path)
+          : null, // Ensure profileImage is being passed correctly
+    });
+
+    // Log the form data being sent to the server for debugging
+    print('Form Data being sent to the server:');
+    formData.fields.forEach((field) {
+      print('${field.key}: ${field.value}');
+    });
+
     try {
-      final response = await client.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-          'username': userEntity.username,
-          'password': userEntity.password,
-          'email': userEntity.email,
-        }),
+      final response = await dio.post(
+        url.toString(),
+        data: formData,
+        options: Options(
+          headers: {
+            'Content-Type': 'multipart/form-data', // Ensure multipart form is set
+          },
+        ),
       );
 
+      // Log the server response for debugging
+      print('Response: ${response.data}');
+
       if (response.statusCode != 200) {
-        throw ServerException('Failed to register user: ${response.body}');
+        throw ServerException('Failed to register user: ${response.data}');
       }
     } catch (e) {
+      // Log the error details for debugging
+      print('Error: $e');
       throw ServerException('Failed to register user: $e');
     }
   }
 
   @override
   Future<UserEntity?> loginUser(String username, String password) async {
-    final url = Uri.parse('$baseUrl/login');
+    final url = Uri.parse('$baseUrl/auth/signin');
     try {
-      final response = await client.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
+      final response = await dio.post(
+        url.toString(),
+        data: {
           'username': username,
           'password': password,
-        }),
+        },
       );
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        final data = response.data;
         final user = AuthApiModel.fromJson(data);
-        return user.toEntity(); // Converts the API model to UserEntity
+        return user.toEntity();
       } else {
         throw ServerException('Invalid username or password');
       }
@@ -67,11 +83,15 @@ abstract class AuthRemoteDataSource implements IAuthLocalDataSource {
   Future<void> uploadProfilePicture(File file) async {
     final url = Uri.parse('$baseUrl/uploadProfilePicture');
     try {
-      final request = http.MultipartRequest('POST', url)
-        ..headers['Content-Type'] = 'multipart/form-data'
-        ..files.add(await http.MultipartFile.fromPath('file', file.path));
+      final formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(file.path),
+      });
 
-      final response = await request.send();
+      final response = await dio.post(
+        url.toString(),
+        data: formData,
+      );
+
       if (response.statusCode != 200) {
         throw ServerException('Failed to upload profile picture');
       }
@@ -84,12 +104,12 @@ abstract class AuthRemoteDataSource implements IAuthLocalDataSource {
   Future<UserEntity> getCurrentUser() async {
     final url = Uri.parse('$baseUrl/currentUser');
     try {
-      final response = await client.get(url);
+      final response = await dio.get(url.toString());
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        final data = response.data;
         final user = AuthApiModel.fromJson(data);
-        return user.toEntity(); // Converts the API model to UserEntity
+        return user.toEntity();
       } else {
         throw ServerException('Failed to fetch current user');
       }
@@ -102,10 +122,10 @@ abstract class AuthRemoteDataSource implements IAuthLocalDataSource {
   Future<List<UserEntity>> getUsersInProject(String projectId) async {
     final url = Uri.parse('$baseUrl/project/$projectId/users');
     try {
-      final response = await client.get(url);
+      final response = await dio.get(url.toString());
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        final data = response.data;
         final users = (data as List)
             .map((userData) => AuthApiModel.fromJson(userData))
             .toList();
@@ -116,5 +136,35 @@ abstract class AuthRemoteDataSource implements IAuthLocalDataSource {
     } catch (e) {
       throw ServerException('Failed to fetch users in project: $e');
     }
+  }
+
+  @override
+  Future<void> createUser(UserEntity userEntity) {
+    // TODO: implement createUser
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> deleteUser(String userId) {
+    // TODO: implement deleteUser
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<UserEntity>> getAllUsers() {
+    // TODO: implement getAllUsers
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<UserEntity?> getUserById(String userId) {
+    // TODO: implement getUserById
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> updateUser(UserEntity userEntity) {
+    // TODO: implement updateUser
+    throw UnimplementedError();
   }
 }

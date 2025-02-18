@@ -129,7 +129,7 @@ class LoginScreen extends StatelessWidget {
                       // Dispatch the LoginRequested event
                       BlocProvider.of<LoginBloc>(context).add(
                         LoginRequested(
-                          username: username,
+                          name: username,
                           password: password,
                           context: context, email: AutofillHints.email,
                         ),

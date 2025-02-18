@@ -35,7 +35,7 @@ class AuthLocalDataSource implements IAuthLocalDataSource {
       image: "",
       password: "",
       email: '',
-      username: '',
+      name: '',
     ));
   }
 
@@ -87,7 +87,7 @@ class AuthLocalDataSource implements IAuthLocalDataSource {
 
   Future<void> registerUser(UserEntity userEntity) async {
     try {
-      final existingUser = await _hiveService.getUserById(userEntity.username);
+      final existingUser = await _hiveService.getUserById(userEntity.name);
       if (existingUser != null) {
         throw Exception('Username already exists.');
       }

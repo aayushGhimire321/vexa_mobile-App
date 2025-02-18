@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:vexa/core/network/api_service.dart';
-import 'package:vexa/features/auth/domain/repository/auth_repository.dart';  // Import AuthRepository
+import 'package:vexa/features/auth/domain/repository/auth_repository.dart'; // Import AuthRepository
 
 import '../../core/network/hive_service.dart';
 import '../../features/auth/data/repository/auth_repository.dart';
@@ -43,17 +43,29 @@ _initApiService() {
 
 _initAuthDependencies() async {
   // Register IAuthRepository with its implementation (AuthRepository)
-  getIt.registerLazySingleton<IAuthRepository>(() => AuthRepository(apiService: getIt<ApiService>()));
+  getIt.registerLazySingleton<IAuthRepository>(
+          () => AuthRepository(apiService: getIt<ApiService>()));
 
   // Register use cases with the correct IAuthRepository
-  getIt.registerLazySingleton<LoginUseCase>(() => LoginUseCase(authrepository: getIt<IAuthRepository>()));
-  getIt.registerLazySingleton<RegisterUseCase>(() => RegisterUseCase(authRepository: getIt<IAuthRepository>()));
-  getIt.registerLazySingleton<UploadImageUseCase>(() => UploadImageUseCase(repository: getIt<IAuthRepository>()));
-
+  getIt.registerLazySingleton<LoginUseCase>(
+          () => LoginUseCase(authrepository: getIt<IAuthRepository>()));
+  getIt.registerLazySingleton<RegisterUseCase>(
+          () => RegisterUseCase(authRepository: getIt<IAuthRepository>()));
+  getIt.registerLazySingleton<UploadImageUseCase>(
+          () => UploadImageUseCase(repository: getIt<IAuthRepository>()));
 
   // Register the blocs that depend on use cases
-  getIt.registerFactory<LoginBloc>(() => LoginBloc(loginUseCase: getIt<LoginUseCase>()));
-  getIt.registerFactory<RegisterBloc>(() => RegisterBloc(registerUseCase: getIt<RegisterUseCase>(), uploadImageUseCase: getIt<UploadImageUseCase>(), dio: getIt<Dio>()));
+  getIt.registerFactory<LoginBloc>(
+          () => LoginBloc(loginUseCase: getIt<LoginUseCase>()));
+
+  // Register the RegisterBloc with ApiService, UploadImageUseCase, and RegisterUseCase
+  getIt.registerFactory<RegisterBloc>(() => RegisterBloc(
+    getIt<ApiService>(), // Pass ApiService here
+    registerUseCase: getIt<RegisterUseCase>(),
+    uploadImageUseCase: getIt<UploadImageUseCase>(),
+    dio: getIt<Dio>(), // Pass Dio here
+  ));
+
   getIt.registerFactory<ForgotPasswordBloc>(() => ForgotPasswordBloc());
 }
 
