@@ -86,7 +86,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
       debugPrint('Form data: $formData'); // Debugging step to ensure correct data
 
       // Make the API call using ApiService
-      var response = await _apiService.dio.post(ApiEndpoints.signUp, data: formData);
+      var response = await _apiService.dio.post(
+        ApiEndpoints.signUp,
+        data: formData,
+        options: Options(
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "multipart/form-data",  // Change Content-Type to multipart/form-data
+          },
+        ),
+      );
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         _showSnackBar('Registered successfully!', Colors.green);
