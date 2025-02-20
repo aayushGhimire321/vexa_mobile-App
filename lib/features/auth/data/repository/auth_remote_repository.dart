@@ -27,11 +27,9 @@ abstract class AuthRemoteRepository implements IAuthLocalDataSource {
   @override
   Future<UserEntity?> loginUser(String username, String password) async {
     try {
-      // Ensure email and password are being passed correctly
-      print('Login user with email: $username and password: $password');
+      // You can add your login logic or data manipulation here
       return await _authRemoteDatasource.loginUser(username, password);
     } catch (e) {
-      print('Login failed: $e');
       throw ServerException('Login failed: ${e.toString()}', statusCode: 400);
     }
   }
@@ -39,13 +37,8 @@ abstract class AuthRemoteRepository implements IAuthLocalDataSource {
   @override
   Future<void> registerUser(UserEntity entity, File profileImage) async {
     try {
-      // Log the data being sent to the server
-      print('Registering user with email: ${entity.email}');
-      print('User data: ${entity.toJson()}');
-
       await _authRemoteDatasource.registerUser(entity, profileImage);
     } catch (e) {
-      print('Registration failed: $e');
       throw ServerException('Registration failed: ${e.toString()}', statusCode: 400);
     }
   }
@@ -53,10 +46,8 @@ abstract class AuthRemoteRepository implements IAuthLocalDataSource {
   @override
   Future<void> uploadProfilePicture(File file) async {
     try {
-      print('Uploading profile picture');
       return await _authRemoteDatasource.uploadProfilePicture(file);
     } catch (e) {
-      print('Profile picture upload failed: $e');
       throw ServerException('Profile picture upload failed: ${e.toString()}', statusCode: 500);
     }
   }
