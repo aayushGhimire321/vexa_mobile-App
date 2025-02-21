@@ -5,7 +5,7 @@ import 'login_event.dart';
 import 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final Dio _dio = Dio(BaseOptions(baseUrl: 'http://10.0.2.2:3000/api/v1/')); // Use your backend URL
+  final Dio _dio = Dio(BaseOptions(baseUrl: 'https://vexa.onrender.com/api/')); // Use your backend URL
 
   LoginBloc({required LoginUseCase loginUseCase}) : super(LoginState.initial()) {
     on<LoginRequested>(_onLoginRequested);
@@ -18,7 +18,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       final response = await _dio.post(
         'auth/signin',
         data: {
-          'email': event.name, // Assuming email is used for login
+          'email': event.email, // Assuming email is used for login
           'password': event.password,
         },
       );

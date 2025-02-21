@@ -10,7 +10,7 @@ import 'forget_password.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatelessWidget {
-  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   @override
@@ -48,8 +48,8 @@ class LoginScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               CustomTextField(
-                hintText: 'Username',
-                controller: usernameController,
+                hintText: 'Email',
+                controller: emailController,
               ),
               const SizedBox(height: 10),
               CustomTextField(
@@ -112,11 +112,11 @@ class LoginScreen extends StatelessWidget {
                   return CustomButton(
                     text: 'Login',
                     onPressed: () {
-                      String username = usernameController.text.trim();
+                      String email = emailController.text.trim();
                       String password = passwordController.text.trim();
 
                       // Simple form validation
-                      if (username.isEmpty || password.isEmpty) {
+                      if (email.isEmpty || password.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Please fill in both fields'),
@@ -129,9 +129,9 @@ class LoginScreen extends StatelessWidget {
                       // Dispatch the LoginRequested event
                       BlocProvider.of<LoginBloc>(context).add(
                         LoginRequested(
-                          name: username,
+                          email: email,
                           password: password,
-                          context: context, email: AutofillHints.email,
+                          context: context,
                         ),
                       );
                     },
