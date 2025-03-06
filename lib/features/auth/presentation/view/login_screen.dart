@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:vexa/app/constants/strings.dart';
-import 'package:vexa/features/auth/presentation/view/register_screen.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../app/widget/CustomTextField.dart';
 import '../../../../app/widget/custom_button.dart';
 import '../../../dashboard/presentation/view/dashboard_screen.dart';
+import '../view_model/login/login_bloc.dart';
+import '../view_model/login/login_event.dart';
+import '../view_model/login/login_state.dart';
 import 'forget_password.dart';
- // Import the constants file
+import 'register_screen.dart';
 
 class LoginScreen extends StatelessWidget {
-  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   @override
@@ -24,7 +25,7 @@ class LoginScreen extends StatelessWidget {
             children: <Widget>[
               const SizedBox(height: 40),
               Image.asset(
-                AppStrings.loginImage, // Use the constant here
+                'assets/images/login.png', // Placeholder
                 height: 160,
               ),
               const SizedBox(height: 10),
@@ -47,8 +48,8 @@ class LoginScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               CustomTextField(
-                hintText: 'Username',
-                controller: usernameController,
+                hintText: 'Email',
+                controller: emailController,
               ),
               const SizedBox(height: 10),
               CustomTextField(
@@ -62,8 +63,7 @@ class LoginScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => ForgotPasswordScreen()),
+                      MaterialPageRoute(builder: (context) => ForgotPasswordScreen()),
                     );
                   },
                   child: Text(
@@ -76,37 +76,66 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              CustomButton(
-                text: 'Login',
-                onPressed: () {
-                  String username = usernameController.text.trim();
-                  String password = passwordController.text.trim();
-
-                  if (username == "Aayush" && password == "12345") {
+              BlocConsumer<LoginBloc, LoginState>(
+                listener: (context, state) {
+                  if (state.isSuccess) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text(
-                          'Logged in successfully',
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        content: Text('Logged in successfully'),
                         backgroundColor: Colors.green,
                       ),
                     );
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => DashboardScreen()),
-                    );
-                  } else {
+
+                    // Ensure navigation happens after the current frame
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => DashboardScreen()),
+                      );
+                    });
+                  }
+
+                  if (state.errorMessage.isNotEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'Invalid credentials',
-                          style: TextStyle(color: Colors.white),
-                        ),
+                      SnackBar(
+                        content: Text('Invalid credentials: ${state.errorMessage}'),
                         backgroundColor: Colors.red,
                       ),
                     );
                   }
+                },
+                builder: (context, state) {
+                  if (state.isLoading) {
+                    return const CircularProgressIndicator();
+                  }
+
+                  return CustomButton(
+                    text: 'Login',
+                    onPressed: () {
+                      String email = emailController.text.trim();
+                      String password = passwordController.text.trim();
+
+                      // Simple form validation
+                      if (email.isEmpty || password.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please fill in both fields'),
+                            backgroundColor: Colors.orange,
+                          ),
+                        );
+                        return;
+                      }
+
+                      // Dispatch the LoginRequested event
+                      BlocProvider.of<LoginBloc>(context).add(
+                        LoginRequested(
+                          email: email,
+                          password: password,
+                          context: context,
+                        ),
+                      );
+                    },
+                  );
                 },
               ),
               const SizedBox(height: 10),

@@ -1,26 +1,38 @@
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
+import 'package:vexa/features/auth/domain/use_case/login_usecase.dart';
 import 'login_event.dart';
 import 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final String correctUsername = "Aayush"; // Mocked data
-  final String correctPassword = "12345";
+  final Dio _dio = Dio(BaseOptions(baseUrl: 'https://vexa.onrender.com/api/')); // Use your backend URL
 
-  LoginBloc() : super(LoginInitial()) {
-    on<LoginSubmitted>(_onLoginSubmitted);
+  LoginBloc({required LoginUseCase loginUseCase}) : super(LoginState.initial()) {
+    on<LoginRequested>(_onLoginRequested);
   }
 
-  Future<void> _onLoginSubmitted(
-      LoginSubmitted event, Emitter<LoginState> emit) async {
-    emit(LoginLoading());
+  Future<void> _onLoginRequested(LoginRequested event, Emitter<LoginState> emit) async {
+    emit(state.copyWith(isLoading: true, errorMessage: "", isSuccess: false));
 
-    // Simulate login process
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      final response = await _dio.post(
+        'auth/signin',
+        data: {
+          'email': event.email, // Assuming email is used for login
+          'password': event.password,
+        },
+      );
 
-    if (event.username == correctUsername && event.password == correctPassword) {
-      emit(LoginSuccess());
-    } else {
-      emit(LoginFailure("Invalid username or password."));
+      if (response.statusCode == 200) {
+        emit(state.copyWith(isSuccess: true, isLoading: false));
+      } else {
+        emit(state.copyWith(isLoading: false, errorMessage: "Invalid response from server"));
+      }
+    } on DioException catch (e) {
+      emit(state.copyWith(
+        isLoading: false,
+        errorMessage: e.response?.data['message'] ?? "Login failed",
+      ));
     }
   }
 }
