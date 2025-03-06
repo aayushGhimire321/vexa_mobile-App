@@ -1,18 +1,39 @@
-class Failure {
+import 'package:equatable/equatable.dart';
+
+class Failure extends Equatable {
   final String message;
-  final int? statusCode;
-  Failure({
-    required this.message,
-    this.statusCode,
-  });
+
+
+
+
+  const Failure({required this.message});
 
   @override
-  String toString() => 'Failure(message: $message, statusCode: $statusCode)';
+  List<Object> get props => [message];
 }
-class LocalDatabaseFailure extends Failure {
-  LocalDatabaseFailure({required String message, int? statusCode})
-      : super(message: message, statusCode: statusCode);
 
-  @override
-  String toString() => 'LocalDatabaseFailure(message: $message, statusCode: $statusCode)';
+class LocalDatabaseFailure extends Failure {
+  const LocalDatabaseFailure({required super.message});
+}
+
+class ApiFailure extends Failure {
+  final int? statusCode;
+  const ApiFailure({
+    this.statusCode,
+    required super.message,
+  });
+}
+
+// Add the InvalidInputFailure class
+class InvalidInputFailure extends Failure {
+  const InvalidInputFailure({required super.message});
+
+}
+
+class ServerFailure extends Failure {
+  const ServerFailure({required String message}) : super(message: message);
+}
+
+class NetworkFailure extends Failure {
+  const NetworkFailure({required String message}) : super(message: message);
 }

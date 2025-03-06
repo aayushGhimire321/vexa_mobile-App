@@ -1,0 +1,2 @@
+C:/Users/Legion/Desktop/Vexa/android/app/.cxx/Debug/582h6t5n/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/Legion/Desktop/Vexa/android/app/.cxx/Debug/582h6t5n/arm64-v8a/CMakeFiles/rebuild_cache.dir

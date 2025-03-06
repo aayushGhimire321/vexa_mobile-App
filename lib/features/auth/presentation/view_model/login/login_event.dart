@@ -1,18 +1,22 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
-/// Base Event Class
 abstract class LoginEvent extends Equatable {
   @override
   List<Object?> get props => [];
 }
 
-/// Event: When the user submits the login form
-class LoginSubmitted extends LoginEvent {
-  final String username;
+class LoginRequested extends LoginEvent {
+  final String email;  // Assuming username is the same as email
   final String password;
 
-  LoginSubmitted({required this.username, required this.password});
+  LoginRequested({required this.email, required this.password, required BuildContext context});
 
   @override
-  List<Object?> get props => [username, password];
+  List<Object?> get props => [email, password];
+}
+
+class NavigateDashboardEvent extends LoginEvent {
+  @override
+  List<Object?> get props => [];
 }
