@@ -1,33 +1,16 @@
+import 'package:flutter/cupertino.dart';
 
-import 'package:flutter/material.dart';
+import 'app/app.dart';
+import 'app/di/di.dart';
+import 'core/network/hive_service.dart';
 
-import 'package:vexa/features/splash/presentation/view/splash_screen.dart';
-import 'core/theme/theme.dart';
-import 'features/auth/presentation/view/login_screen.dart';
-import 'features/onboarding/presentation/view/onboarding_screen.dart';
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
+  var hiveService = HiveService(); // Singleton instance
+  await hiveService.init();
 
-void main() {
-  runApp(const VexaApp());
-}
+  await initDependencies();
 
-class VexaApp extends StatelessWidget {
-  const VexaApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Vexa',
-      theme: AppTheme.darkTheme,  // Use the dark theme defined in theme.dart
-      initialRoute: '/splash', // Start at splash screen
-      routes: {
-        '/splash': (context) =>  SplashScreen(),
-        '/onboarding': (context) =>  OnboardingScreen(), // Route for onboarding
-        '/login': (context) => LoginScreen(),
-      },
-      // Optionally, you can check whether onboarding has been completed
-      // and set the home to SplashScreen or OnboardingFlow
-      home:  SplashScreen(),
-    );
-  }
+  runApp(App());
 }

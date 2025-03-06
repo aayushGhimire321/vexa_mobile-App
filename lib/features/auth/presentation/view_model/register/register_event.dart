@@ -1,17 +1,19 @@
-import 'package:equatable/equatable.dart';
+import 'dart:io';
 
-abstract class RegisterEvent extends Equatable {
-  @override
-  List<Object?> get props => [];
-}
+abstract class RegisterEvent {}
 
-class SubmitRegistration extends RegisterEvent {
+class RegisterUserEvent extends RegisterEvent {
   final String username;
+  final String email;
   final String password;
   final String confirmPassword;
+  final File? profileImage;
 
-  SubmitRegistration(this.username, this.password, this.confirmPassword);
-
-  @override
-  List<Object?> get props => [username, password, confirmPassword];
+  RegisterUserEvent({
+    required this.username,
+    required this.email,
+    required this.password,
+    required this.confirmPassword,
+    this.profileImage,
+  });
 }
